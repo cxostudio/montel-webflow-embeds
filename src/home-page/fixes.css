@@ -159,3 +159,6 @@ html body .slick_arrow_gradient_lock .slick-arrow:focus-visible {
   .mtl-nl__b { left: -18%; } .mtl-nl__c { left: 52%; }
 }
 @media (prefers-reduced-motion: reduce) { .mtl-nl::before, .mtl-nl__s > i { animation: none; } }
+
+/* ---------- Homepage: Why Montel and Coverage sections hidden (still in Webflow, delete there to remove for good) ---------- */
+main > section.cta, main > section.coverage { display: none !important; }
