@@ -211,6 +211,26 @@
     });
   })();
 
+  /* ---------------- Newsletter: live background shapes, slow drift + light cursor parallax ---------------- */
+  (function newsletter() {
+    var sec = document.querySelector('.newsletter'); if (!sec || sec.querySelector('.mtl-nl')) return;
+    var art = document.createElement('div'); art.className = 'mtl-nl'; art.setAttribute('aria-hidden', 'true');
+    var spec = [['a', 22, -8, 18, 0, 6], ['b', 18, 16, -12, -4, 14], ['c', 24, -14, 10, -9, 10], ['d', 20, 10, 14, -2, 5]];
+    var shapes = spec.map(function (p) {
+      var s = document.createElement('div'); s.className = 'mtl-nl__s mtl-nl__' + p[0];
+      s.style.setProperty('--d', p[1] + 's'); s.style.setProperty('--fx', p[2] + 'px'); s.style.setProperty('--fy', p[3] + 'px'); s.style.setProperty('--dl', p[4] + 's');
+      s.innerHTML = '<i></i>'; art.appendChild(s); return { el: s, depth: p[5] };
+    });
+    sec.insertBefore(art, sec.firstChild); sec.classList.add('has-mtl-nl');
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!window.matchMedia('(hover: hover)').matches) return;
+    sec.addEventListener('pointermove', function (e) {
+      var r = sec.getBoundingClientRect(), nx = (e.clientX - r.left) / r.width - .5, ny = (e.clientY - r.top) / r.height - .5;
+      shapes.forEach(function (s) { s.el.style.translate = (-nx * s.depth * 2).toFixed(1) + 'px ' + (-ny * s.depth * 1.4).toFixed(1) + 'px'; });
+    });
+    sec.addEventListener('pointerleave', function () { shapes.forEach(function (s) { s.el.style.translate = '0px 0px'; }); });
+  })();
+
   /* ---------------- Testimonial: one slow crossfade for text, photo and tabs ---------------- */
   (function testimonials() {
     if (!$ || !$.fn.slick) return;

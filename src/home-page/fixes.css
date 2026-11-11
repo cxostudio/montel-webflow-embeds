@@ -123,3 +123,39 @@ html body .slick_arrow_gradient_lock .slick-arrow:focus-visible {
 .testimonial__name_slider .slick-cloned { display: none !important; }
 .testimonial__name_slider .slick-slide,
 .testimonial__name_slider .slick-slide * { transition: background-color .7s ease, color .7s ease, opacity .7s ease; }
+
+/* ---------- Newsletter: live shapes instead of the two flat art images ---------- */
+.newsletter.has-mtl-nl { overflow: hidden; isolation: isolate; }
+.newsletter.has-mtl-nl .newsletter__left_art, .newsletter.has-mtl-nl .newsletter__right_art { display: none; }
+.newsletter.has-mtl-nl > .container { position: relative; z-index: 2; }
+.mtl-nl { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.mtl-nl::before {
+  content: ""; position: absolute; inset: -40%;
+  background: radial-gradient(40% 50% at 20% 70%, rgba(186, 248, 240, .9), transparent 70%),
+              radial-gradient(45% 55% at 80% 30%, rgba(203, 199, 255, .9), transparent 70%),
+              radial-gradient(35% 45% at 55% 60%, rgba(196, 228, 255, .7), transparent 70%);
+  animation: mtlNlSky 24s ease-in-out infinite alternate;
+}
+@keyframes mtlNlSky { from { transform: translate3d(-6%, 3%, 0) rotate(0deg); } to { transform: translate3d(6%, -3%, 0) rotate(8deg); } }
+.mtl-nl__s { position: absolute; will-change: transform; transition: translate .9s cubic-bezier(.2, .8, .2, 1); }
+.mtl-nl__s > i {
+  position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(160deg, rgba(243, 239, 255, .78) 0%, rgba(232, 236, 255, .5) 55%, rgba(225, 246, 246, .35) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55);
+  animation: mtlNlFloat var(--d, 20s) ease-in-out infinite alternate; animation-delay: var(--dl, 0s);
+}
+@keyframes mtlNlFloat {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(var(--fx, 14px), var(--fy, -10px), 0) scale(1.035); }
+  100% { transform: translate3d(calc(var(--fx, 14px) * -.6), calc(var(--fy, -10px) * -.8), 0) scale(.985); }
+}
+/* the composition of the original art: an arch on each edge, two large circles */
+.mtl-nl__a { left: -7%; top: -1%; width: 20%; height: 102%; border-radius: 0 50% 50% 0 / 0 34% 34% 0; }
+.mtl-nl__b { left: 13%; top: 0; height: 104%; aspect-ratio: 1; border-radius: 50%; }
+.mtl-nl__c { left: 58.5%; top: 0; height: 104%; aspect-ratio: 1; border-radius: 50%; }
+.mtl-nl__d { right: -6%; top: -1%; width: 18%; height: 102%; border-radius: 50% 0 0 50% / 34% 0 0 34%; }
+@media (max-width: 767px) {
+  .mtl-nl__a, .mtl-nl__d { width: 34%; }
+  .mtl-nl__b { left: -18%; } .mtl-nl__c { left: 52%; }
+}
+@media (prefers-reduced-motion: reduce) { .mtl-nl::before, .mtl-nl__s > i { animation: none; } }
