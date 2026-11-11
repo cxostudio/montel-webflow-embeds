@@ -37,3 +37,10 @@ dist/           minified bundles served by jsDelivr
 ```
 
 Map data: Natural Earth, public domain.
+
+## Hero pages: Analytics, Risk, News
+
+One bundle per page: `dist/montel-{analytics,risk,news}.min.{css,js}`. Each swaps the page hero image (`.page_hero__img_container`) for its animation and keeps the image's proportions. Under 760px each animation switches to its own stacked layout.
+
+- Markup lives in `src/<page>-page/embed.html`. `build/gen-mounts.py` turns it into `mount.js` (run by `build/build.sh`).
+- Photos and video live in `assets/risk/` and `assets/news/`. They load from the same commit as the bundle, so pinning the commit pins the assets too.

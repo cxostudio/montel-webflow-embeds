@@ -1,0 +1,99 @@
+/* =========================================================
+   Montel · Decision support (risk) hero  (v1.0)
+   The hedge decision, played out live: moving the hedge
+   pulls the price range in and cuts the cost at risk.
+   Namespaced under .mtl-rk. No dependencies.
+   ========================================================= */
+.mtl-rk {
+  --ink: #0c2a2b; --muted: #5f7372; --line: #e4ebe9;
+  --green: #0d6d5c; --green-2: #1a9f82; --mint: #e1f5ed;
+  --purple: #6a2ff6; --lav: #e7defe;
+  position: relative; width: 100%; aspect-ratio: 1000 / 760;
+  font-family: var(--mtl-font, inherit); color: var(--ink); line-height: 1.2;
+  -webkit-font-smoothing: antialiased; font-feature-settings: "tnum" 1;
+}
+.mtl-rk *, .mtl-rk *::before, .mtl-rk *::after { box-sizing: border-box; }
+.mtl-rk :where(h3, p) { margin: 0; padding: 0; font: inherit; }
+html.mtl-js .mtl-rk__card:not(.is-in) { opacity: 0; }
+
+.mtl-rk__canvas { position: absolute; left: 0; top: 0; width: 1000px; height: 760px; transform-origin: 0 0; transform: scale(var(--mtl-s, .7)); }
+.mtl-rk__glow { position: absolute; left: 560px; top: 180px; width: 520px; height: 440px; border-radius: 50%; background: radial-gradient(closest-side, rgba(138,92,255,.30), rgba(138,92,255,0)); filter: blur(10px); pointer-events: none; }
+
+.mtl-rk__card {
+  position: absolute; left: var(--x); top: var(--y); width: var(--w); height: var(--h);
+  background: rgba(255,255,255,.97); border: 1px solid rgba(12,42,43,.07); border-radius: 26px;
+  box-shadow: 0 1px 1px rgba(12,42,43,.03), 0 8px 18px -6px rgba(12,42,43,.08), 0 30px 60px -26px rgba(12,42,43,.3);
+  transform-origin: 50% 60%; will-change: transform, opacity;
+}
+.mtl-rk__card--purple { background: linear-gradient(150deg, #7437ff 0%, #6526f2 100%); color: #fff; border-color: rgba(255,255,255,.14); box-shadow: 0 28px 56px -22px rgba(92,34,230,.6), 0 6px 16px -6px rgba(70,20,190,.3); }
+
+/* exposure */
+.mtl-rk__exp { padding: 34px 52px 34px 36px; }
+.mtl-rk__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.mtl-rk__t { font-size: 30px; font-weight: 500; letter-spacing: -.012em; }
+.mtl-rk__s { font-size: 19px; color: var(--muted); margin-top: 6px !important; }
+.mtl-rk__chip { display: inline-flex; align-items: center; gap: 9px; height: 40px; padding: 0 16px; border-radius: 999px; background: var(--lav); color: #5223d6; font-size: 18px; font-weight: 500; border: 0; font-family: inherit; cursor: pointer; white-space: nowrap; transition: box-shadow .3s; }
+.mtl-rk__chip:hover { box-shadow: 0 0 0 2px rgba(106,47,246,.35); }
+.mtl-rk__chip svg { width: 18px; height: 18px; }
+.mtl-rk__chip span { transition: opacity .25s; }
+.mtl-rk__chart { position: absolute; left: 34px; top: 132px; width: 590px; height: 322px; overflow: visible; }
+.mtl-rk__axis { font-size: 17px; fill: #5f7372; font-family: var(--mtl-font, inherit); }
+.mtl-rk__legend { position: absolute; left: 36px; top: 486px; display: flex; gap: 26px; font-size: 17px; color: var(--muted); }
+.mtl-rk__legend span { display: inline-flex; align-items: center; gap: 10px; }
+.mtl-rk__legend i { width: 20px; height: 14px; border-radius: 4px; }
+.mtl-rk__hedge { position: absolute; left: 36px; right: 52px; top: 548px; }
+.mtl-rk__hedge-top { display: flex; justify-content: space-between; align-items: baseline; font-size: 19px; }
+.mtl-rk__hedge-top b { font-size: 24px; font-weight: 600; color: var(--green); }
+
+/* the slider is a real range input: draggable, keyboard and touch friendly */
+.mtl-rk__range { -webkit-appearance: none; appearance: none; width: 100%; height: 34px; margin: 16px 0 0; background: transparent; cursor: grab; --p: 0%; }
+.mtl-rk__range:active { cursor: grabbing; }
+.mtl-rk__range:focus-visible { outline: 2px solid rgba(26,159,130,.5); outline-offset: 4px; border-radius: 8px; }
+.mtl-rk__range::-webkit-slider-runnable-track { height: 8px; border-radius: 8px; background: linear-gradient(90deg, var(--green) 0 var(--p), #e4ebe9 var(--p) 100%); }
+.mtl-rk__range::-moz-range-track { height: 8px; border-radius: 8px; background: linear-gradient(90deg, var(--green) 0 var(--p), #e4ebe9 var(--p) 100%); }
+.mtl-rk__range::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 30px; margin-top: -11px; border-radius: 50%; background: #fff; border: 4px solid var(--green); box-shadow: 0 4px 10px rgba(12,42,43,.25); transition: transform .2s; transform: scale(var(--k, 1)); }
+.mtl-rk__range::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 4px solid var(--green); box-shadow: 0 4px 10px rgba(12,42,43,.25); transform: scale(var(--k, 1)); }
+
+/* forward curve */
+.mtl-rk__fwd { padding: 22px 22px; border-radius: 24px; }
+.mtl-rk__fwd .mtl-rk__t { font-size: 22px; white-space: nowrap; }
+.mtl-rk__fwd .mtl-rk__s { font-size: 16px; margin-top: 4px !important; }
+.mtl-rk__lock { font-size: 13.5px; font-weight: 600; color: var(--green); background: var(--mint); padding: 5px 10px; border-radius: 999px; white-space: nowrap; }
+.mtl-rk__fsvg { position: absolute; left: 20px; top: 92px; width: 270px; height: 136px; overflow: visible; }
+
+/* cost at risk */
+.mtl-rk__car { padding: 24px 26px; border-radius: 24px; }
+.mtl-rk__car-l { font-size: 18px; color: rgba(255,255,255,.8); }
+.mtl-rk__car-v { font-size: 58px; font-weight: 500; letter-spacing: -.025em; margin-top: 8px !important; }
+.mtl-rk__car-s { font-size: 19px; line-height: 1.35; margin-top: 6px !important; }
+.mtl-rk__car-f { font-size: 15px; color: rgba(255,255,255,.72); margin-top: 14px !important; }
+
+/* expert review */
+.mtl-rk__exp2 { overflow: hidden; border-radius: 24px; }
+.mtl-rk__photo { height: 116px; overflow: hidden; }
+.mtl-rk__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mtl-rk__rev { display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; }
+.mtl-rk__rev .mtl-rk__t { font-size: 22px; }
+.mtl-rk__rev .mtl-rk__s { font-size: 16.5px; margin-top: 4px !important; transition: opacity .3s; }
+.mtl-rk__ok { width: 34px; height: 34px; flex: none; color: var(--green); }
+.mtl-rk__spin { transform-origin: 50% 50%; }
+
+/* phones: stacked */
+@media (max-width: 760px) {
+  .mtl-rk { aspect-ratio: auto; }
+  .mtl-rk__canvas { position: relative; width: auto; height: auto; transform: none; display: flex; flex-direction: column; gap: 12px; }
+  .mtl-rk__glow { display: none; }
+  .mtl-rk__card { position: relative; left: auto; top: auto; width: auto; height: auto; }
+  .mtl-rk__exp { padding: 20px; }
+  .mtl-rk__t { font-size: 21px; } .mtl-rk__s { font-size: 14px; }
+  .mtl-rk__chip { height: 32px; font-size: 13.5px; padding: 0 11px; }
+  .mtl-rk__chart { position: relative; left: auto; top: auto; width: 100%; height: auto; margin-top: 14px; }
+  .mtl-rk__legend { position: relative; left: auto; top: auto; margin-top: 10px; font-size: 13px; gap: 16px; }
+  .mtl-rk__hedge { position: relative; left: auto; right: auto; top: auto; margin-top: 16px; }
+  .mtl-rk__hedge-top { font-size: 14px; } .mtl-rk__hedge-top b { font-size: 18px; }
+  .mtl-rk__fwd { padding: 18px; } .mtl-rk__fwd .mtl-rk__t { font-size: 18px; } .mtl-rk__fwd .mtl-rk__s { font-size: 13px; }
+  .mtl-rk__fsvg { position: relative; left: auto; top: auto; width: 100%; height: auto; margin-top: 10px; }
+  .mtl-rk__car { padding: 20px; } .mtl-rk__car-v { font-size: 40px; } .mtl-rk__car-s { font-size: 15px; } .mtl-rk__car-l, .mtl-rk__car-f { font-size: 13px; }
+  .mtl-rk__rev .mtl-rk__t { font-size: 18px; } .mtl-rk__rev .mtl-rk__s { font-size: 13.5px; }
+  .mtl-rk__chart .mtl-rk__axis { font-size: 28px; }
+}

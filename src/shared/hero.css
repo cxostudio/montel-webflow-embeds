@@ -1,0 +1,11 @@
+/* =========================================================
+   Montel · hero glue (Analytics, Risk, News)
+   The animation replaces the hero image and keeps its box:
+   same proportions, animation centred inside.
+   ========================================================= */
+.page_hero__img_container.has-mtl-hero { position: relative; overflow: visible; }
+.page_hero__img_container.has-mtl-hero > .page_hero__img { display: none; }
+.mtl-hero-mount { width: 100%; aspect-ratio: var(--mtl-hero-ar, 1.5); display: flex; align-items: center; }
+.mtl-hero-mount > * { flex: 1 1 auto; min-width: 0; }
+/* phone: each animation switches to its own stacked layout, so let it set the height */
+@media (max-width: 760px) { .mtl-hero-mount { aspect-ratio: auto; display: block; } }

@@ -1,0 +1,42 @@
+<!-- Montel · Decision support hero visual. Place inside the hero's right column. -->
+<div class="mtl-rk" data-mtl-risk>
+  <div class="mtl-rk__canvas">
+    <div class="mtl-rk__glow" aria-hidden="true"></div>
+
+    <section class="mtl-rk__card mtl-rk__exp" data-o="0" style="--x:13px;--y:40px;--w:666px;--h:662px">
+      <div class="mtl-rk__head">
+        <div><h3 class="mtl-rk__t">Price exposure</h3><p class="mtl-rk__s">Monthly energy cost · EUR million</p></div>
+        <button type="button" class="mtl-rk__chip" aria-label="Switch price scenario"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg><span>Scenarios</span></button>
+      </div>
+      <svg class="mtl-rk__chart" viewBox="0 0 616 336" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+      <div class="mtl-rk__legend"><span><i style="background:#e7defe"></i>Unhedged range</span><span><i style="background:#8fdcbf"></i>With hedge</span></div>
+      <div class="mtl-rk__hedge">
+        <div class="mtl-rk__hedge-top"><label for="mtl-rk-hedge">Hedged volume</label><b class="mtl-rk__pct">70%</b></div>
+        <input id="mtl-rk-hedge" class="mtl-rk__range" type="range" min="0" max="100" step="1" value="70" aria-label="Hedged volume">
+      </div>
+    </section>
+
+    <section class="mtl-rk__card mtl-rk__fwd" data-o="1" style="--x:660px;--y:10px;--w:310px;--h:244px">
+      <div class="mtl-rk__head">
+        <div><h3 class="mtl-rk__t">Forward curve</h3><p class="mtl-rk__s">Power · EUR/MWh</p></div>
+        <span class="mtl-rk__lock">5 of 7 locked</span>
+      </div>
+      <svg class="mtl-rk__fsvg" viewBox="0 0 270 136" aria-hidden="true"></svg>
+    </section>
+
+    <section class="mtl-rk__card mtl-rk__card--purple mtl-rk__car" data-o="2" style="--x:660px;--y:268px;--w:310px;--h:240px">
+      <p class="mtl-rk__car-l">Cost at risk</p>
+      <p class="mtl-rk__car-v">€<span class="mtl-rk__car-n">4.1</span> m</p>
+      <p class="mtl-rk__car-s">down from €<span class="mtl-rk__car-u">12.4</span> m unhedged</p>
+      <p class="mtl-rk__car-f">95% range, next 12 months</p>
+    </section>
+
+    <section class="mtl-rk__card mtl-rk__exp2" data-o="3" style="--x:660px;--y:522px;--w:310px;--h:226px">
+      <div class="mtl-rk__photo"><img src="assets/expert-photo.webp" alt="Montel analysts reviewing a client's assumptions" loading="eager"></div>
+      <div class="mtl-rk__rev">
+        <div><h3 class="mtl-rk__t">Expert review</h3><p class="mtl-rk__s">Assumptions checked</p></div>
+        <svg class="mtl-rk__ok" viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle class="mtl-rk__ring" cx="17" cy="17" r="14"/><path class="mtl-rk__tick" d="m11 17.5 4 4 8-8.5"/></svg>
+      </div>
+    </section>
+  </div>
+</div>

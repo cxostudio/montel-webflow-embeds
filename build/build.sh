@@ -6,3 +6,12 @@ E=${ESBUILD:-/tmp/esb/node_modules/.bin/esbuild}
 cat src/data-page/mount.js src/shared/montel-map-data.js src/shared/montel-map-borders.js src/data-page/montel-map.js src/data-page/montel-coverage-map.js src/data-page/montel-catalogue.js | $E --minify --loader=js > dist/montel-data.min.js
 cat src/data-page/montel-map.css src/data-page/montel-coverage-map.css src/data-page/montel-catalogue.css src/data-page/page.css | $E --minify --loader=css > dist/montel-data.min.css
 wc -c dist/*
+
+# Hero pages: one bundle each (mount first, then the animation). Mounts are generated from embed.html.
+python3 build/gen-mounts.py
+for p in analytics:montel-fa risk:montel-risk news:montel-news; do
+  page=${p%%:*}; m=${p#*:}
+  cat src/$page-page/mount.js src/$page-page/$m.js | $E --minify --loader=js > dist/montel-$page.min.js
+  cat src/$page-page/$m.css src/shared/hero.css | $E --minify --loader=css > dist/montel-$page.min.css
+done
+wc -c dist/*
