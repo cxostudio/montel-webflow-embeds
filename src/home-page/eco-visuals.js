@@ -344,46 +344,60 @@
   }
 
   /* =========================================================
-     3) Decision support: price scenarios
+     3) Decision support: price scenarios, vertical stack
+        chips on top, scenario chart, portfolio value below
      ========================================================= */
   function scenarioVisual(box) {
-    var W = 800, H = 560, m = Mount(box, W, H, 'mtl-ev--scn', 1.12), c = m.canvas;
-    var card = div('mtl-ev__card', c, '<p class="mtl-ev__t">Price scenarios</p><p class="mtl-ev__s">Germany · EUR/MWh</p>', 'left:64px;top:100px;width:672px;height:394px');
-    var svg = el('svg', { viewBox: '0 0 672 394', class: 'mtl-ev__plot' }); card.appendChild(svg);
-    [122, 188, 254, 320].forEach(function (y) { el('line', { x1: 38, x2: 636, y1: y, y2: y, class: 'mtl-ev__g2' }, svg); });
-    [['2030', 38, 'start'], ['2045', 337, 'middle'], ['2060', 636, 'end']].forEach(function (a) { var t = el('text', { x: a[1], y: 362, class: 'mtl-ev__ax2', 'text-anchor': a[2] }, svg); t.textContent = a[0]; });
+    var W = 560, H = 660, m = Mount(box, W, H, 'mtl-ev--scn', 1), c = m.canvas;
+    var chips = div('mtl-ev__chips', c, '<span class="mtl-ev__c mtl-ev__c--gas" data-k="gas">' + ICONS.carbon + 'Gas</span><span class="mtl-ev__c mtl-ev__c--build" data-k="build"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 8h11a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 16h7"/></svg>Build-out</span>', 'left:160px;top:0;width:380px;height:86px');
+    var card = div('mtl-ev__card', c, '<p class="mtl-ev__t">Price scenarios</p><p class="mtl-ev__s">Germany · EUR/MWh</p>', 'left:0;top:56px;width:560px;height:392px');
+    var svg = el('svg', { viewBox: '0 0 560 392', class: 'mtl-ev__plot' }); card.appendChild(svg);
+    [140, 196, 252, 308].forEach(function (y) { el('line', { x1: 30, x2: 530, y1: y, y2: y, class: 'mtl-ev__g2' }, svg); });
+    [['2030', 30, 'start'], ['2045', 280, 'middle'], ['2060', 530, 'end']].forEach(function (a) { var t = el('text', { x: a[1], y: 352, class: 'mtl-ev__ax2', 'text-anchor': a[2] }, svg); t.textContent = a[0]; });
     var S = [
-      { k: 'gas', label: 'High gas', color: '#f0a52b', to: -96, shape: [0, .05, .12, .25, .45, .62, .74, .85, .93, 1] },
-      { k: 'central', label: 'Central', color: '#0d7d6c', to: -28, shape: [0, .12, .22, .3, .42, .55, .7, .82, .92, 1] },
-      { k: 'build', label: 'Fast build-out', color: '#063b3a', to: 50, shape: [0, .38, .55, .66, .76, .84, .9, .94, .97, 1] }
+      { k: 'gas', label: 'High gas', color: '#f0a52b', to: -104, shape: [0, .05, .12, .25, .45, .62, .74, .85, .93, 1] },
+      { k: 'central', label: 'Central', color: '#0d7d6c', to: -38, shape: [0, .12, .22, .3, .42, .55, .7, .82, .92, 1] },
+      { k: 'build', label: 'Fast build-out', color: '#063b3a', to: 46, shape: [0, .38, .55, .66, .76, .84, .9, .94, .97, 1] }
     ];
-    var Y0 = 254;
+    var Y0 = 262;
     S.forEach(function (s) {
       s.g = el('g', { class: 'mtl-ev__scn' }, svg);
       s.path = el('path', { class: 'mtl-ev__sl', stroke: s.color }, s.g);
-      s.dot = el('circle', { r: 7, fill: s.color, cx: 636 }, s.g);
-      s.ring = el('circle', { r: 7, fill: 'none', stroke: s.color, class: 'mtl-ev__ring', cx: 636 }, s.g);
-      s.txt = el('text', { x: 628, class: 'mtl-ev__sl-t', fill: s.color, 'text-anchor': 'end' }, s.g); s.txt.textContent = s.label;
+      s.dot = el('circle', { r: 7, fill: s.color, cx: 530 }, s.g);
+      s.ring = el('circle', { r: 7, fill: 'none', stroke: s.color, class: 'mtl-ev__ring', cx: 530 }, s.g);
+      s.txt = el('text', { x: 520, class: 'mtl-ev__sl-t', fill: s.color, 'text-anchor': 'end' }, s.g); s.txt.textContent = s.label;
     });
-    var chips = div('mtl-ev__chips', c, '<span class="mtl-ev__c mtl-ev__c--gas" data-k="gas">' + ICONS.carbon + 'Gas</span><span class="mtl-ev__c mtl-ev__c--build" data-k="build"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 8h11a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 16h7"/></svg>Build-out</span>', 'left:334px;top:32px;width:392px;height:96px');
+    var val = div('mtl-ev__val', c, '<p class="k">Portfolio value · 2030 to 2060</p><div class="row"><b class="v">€412m</b><span class="d">Central case</span></div><div class="bar"><i class="rng"></i><i class="mk"></i></div><div class="ends"><span>€360m</span><span>€480m</span></div>', 'left:96px;top:470px;width:464px;height:186px');
+    var vEl = val.querySelector('.v'), dEl = val.querySelector('.d'), mkEl = val.querySelector('.mk'), shown = 412, valTok = 0;
+    var VAL = { none: { v: 412, d: 'Central case', cls: '' }, gas: { v: 468, d: '+13.6% if gas stays high', cls: 'up' }, build: { v: 371, d: '−9.9% with fast build-out', cls: 'down' } };
+    function setVal(k) {
+      var V = VAL[k || 'none'];
+      var from = shown, to = V.v, tok = ++valTok, t0 = performance.now(); shown = to;
+      if (reduce) vEl.textContent = '€' + to + 'm';
+      else (function f(t) { if (tok !== valTok) return; var p = Math.min(1, (t - t0) / 800), e = 1 - Math.pow(1 - p, 3); vEl.textContent = '€' + Math.round(from + (to - from) * e) + 'm'; if (p < 1) requestAnimationFrame(f); })(t0);
+      dEl.textContent = V.d; dEl.className = 'd ' + V.cls;
+      mkEl.style.left = ((V.v - 360) / 120 * 100).toFixed(1) + '%';
+    }
     var r = rnd(777);
     function shape(s, jitter) {
-      var pts = s.shape.map(function (f, i) { var x = 38 + i * (598 / (s.shape.length - 1)); var y = Y0 + s.to * f + (i && i < s.shape.length - 1 ? (r() - .5) * jitter : 0); return [x, y]; });
+      var pts = s.shape.map(function (f, i) { var x = 30 + i * (500 / (s.shape.length - 1)); var y = Y0 + s.to * f + (i && i < s.shape.length - 1 ? (r() - .5) * jitter : 0); return [x, y]; });
       s.path.setAttribute('d', smooth(pts)); var end = pts[pts.length - 1][1];
-      s.dot.setAttribute('cy', end); s.ring.setAttribute('cy', end); s.txt.setAttribute('y', end - 18);
+      s.dot.setAttribute('cy', end); s.ring.setAttribute('cy', end); s.txt.setAttribute('y', end - 16);
     }
     S.forEach(function (s, i) { shape(s, 0); draw(s.path, 1500, 150 * i); });
+    setVal(null);
     var phase = 0, timer = 0;
     function focus(k) {
       S.forEach(function (s) { s.g.classList.toggle('is-dim', !!k && s.k !== k && s.k !== 'central'); s.g.classList.toggle('is-on', s.k === k); });
       [].slice.call(chips.querySelectorAll('.mtl-ev__c')).forEach(function (ch) { ch.classList.toggle('is-on', ch.getAttribute('data-k') === k); });
+      setVal(k);
     }
     function tick() {
       phase = (phase + 1) % 3; var k = phase === 1 ? 'gas' : phase === 2 ? 'build' : null;
-      if (k) { var s = S.filter(function (x) { return x.k === k; })[0]; s.to = k === 'gas' ? -96 - r() * 16 : 50 + r() * 10; shape(s, 10); }
+      if (k) { var s = S.filter(function (x) { return x.k === k; })[0]; s.to = k === 'gas' ? -104 - r() * 14 : 46 + r() * 8; shape(s, 10); }
       focus(k);
     }
-    m.onShow = function () { if (!reduce && !timer) timer = setInterval(tick, 2600); };
+    m.onShow = function () { if (!reduce && !timer) timer = setInterval(tick, 2800); };
     m.onHide = function () { clearInterval(timer); timer = 0; };
   }
 

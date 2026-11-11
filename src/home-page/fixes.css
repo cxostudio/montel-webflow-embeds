@@ -34,6 +34,8 @@
   height: var(--mtl-eco-h, 600px); transform-origin: 50% 0; will-change: transform;
 }
 .eco2.mtl-eco .eco2__body_item > * { height: 100%; }
+/* the stack holds on the last card while its progress bar fills, then releases */
+.eco2.mtl-eco .eco2__body_list::after { content: ""; display: block; flex: 0 0 auto; height: var(--mtl-eco-hold, 0px); margin-top: calc(-1 * var(--mtl-eco-gap, 0px)); }
 /* card 1 */
 .eco2.mtl-eco .eco2__country { box-sizing: border-box; }
 .eco2.mtl-eco .eco2__country__grid { height: 100%; }

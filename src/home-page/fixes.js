@@ -81,13 +81,16 @@
       sec.classList.add('mtl-eco');
 
       var header = document.querySelector('.header');
-      var top = 0, H = 0, gap = 0, S = [], raf = 0;
+      var top = 0, H = 0, gap = 0, hold = 0, S = [], raf = 0;
       function measure() {
         top = (header ? header.getBoundingClientRect().height : 90) + 56;
         H = Math.round(Math.min(640, Math.max(520, window.innerHeight - top - 40)));
         sec.style.setProperty('--mtl-eco-top', top + 'px');
         sec.style.setProperty('--mtl-eco-h', H + 'px');
+        hold = Math.round(H * .45);
+        sec.style.setProperty('--mtl-eco-hold', hold + 'px');
         gap = parseFloat(getComputedStyle(list).rowGap) || 0;
+        sec.style.setProperty('--mtl-eco-gap', gap + 'px');
         var listTop = list.getBoundingClientRect().top + window.pageYOffset;
         S = items.map(function (_, i) { return listTop + i * (H + gap) - top; });
         render();
@@ -98,7 +101,7 @@
         for (var i = 0; i < n; i++) if (y >= S[i] - 2) active = i;
         navItems.forEach(function (el, i) { el.classList.toggle('is-active', i === active); });
         progress.forEach(function (el, i) {
-          var p = i < n - 1 ? (y - S[i]) / (S[i + 1] - S[i]) : (y - S[i]) / H;
+          var p = i < n - 1 ? (y - S[i]) / (S[i + 1] - S[i]) : (y - S[i]) / (hold || H);
           el.style.height = (clamp(p) * 100).toFixed(2) + '%';
         });
         items.forEach(function (el, i) {
@@ -123,7 +126,7 @@
         window.removeEventListener('resize', onResize);
         ScrollTrigger.removeEventListener('refresh', onResize);
         sec.classList.remove('mtl-eco');
-        sec.style.removeProperty('--mtl-eco-top'); sec.style.removeProperty('--mtl-eco-h');
+        sec.style.removeProperty('--mtl-eco-top'); sec.style.removeProperty('--mtl-eco-h'); sec.style.removeProperty('--mtl-eco-hold');
         navItems.forEach(function (el) { el.classList.remove('is-active'); });
         clean();
       };
