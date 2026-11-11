@@ -52,3 +52,16 @@ One bundle per page: `dist/montel-{analytics,risk,news}.min.{css,js}`. Each swap
 - The frame around the tab body (border and drop shadow) is removed, so the cards sit directly on the hero background.
 - Below 640px each slide crops to its main card, and cards that fall mostly outside the crop are hidden.
 - Markup: `src/home-page/embed-*.html`, turned into `mount.js` by `build/gen-mounts.py`. Photos: `assets/home/`. Needs GSAP, which the site already loads.
+
+## Home: design feedback R3 fixes (`fixes.js/.css`) and ecosystem card visuals (`eco-visuals.js/.css`)
+
+Part of the home bundle. The site-wide scripts in Webflow stay untouched; where one misbehaves on the homepage, `fixes.js` switches it off and replaces it.
+
+- Hero tabs: mint gradient hover on inactive tabs (desktop). Phone switcher: arrows disabled at the first/last tab, swipe on the panel, Figma styling.
+- Ecosystem (992px and up): the site's ScrollTrigger pins/fades are killed and replaced by a sticky stack. All three cards share one height (520 to 640px, from the viewport), every card stays at full opacity, "Market insights" is active on entry, the nav progress follows the scroll.
+- Ecosystem (phone): same height for the three cards, swipe between them.
+- Flags: rotate every 3s while in view, pause on hover, a click restarts from that flag. Slick's own autoplay never ran (7 flags, 7 visible).
+- Electric border: loops 90deg to 450deg so it never jumps.
+- Analysts: Figma layout on desktop (left-aligned text, tighter staggered grid, lilac glow).
+- Testimonials: arrow hover keeps the gradient at 90% opacity; 700ms crossfade; company tabs no longer slide.
+- Card visuals: market (card 1, follows the active flag via `MontelEco.setMarket(code|index)` and the `mtl:market` event), live imbalance (card 2), price scenarios (card 3). Run only on screen; reduced motion shows the final frame.

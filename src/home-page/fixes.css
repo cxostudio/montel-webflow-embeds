@@ -1,0 +1,106 @@
+/* =========================================================
+   Montel · Home page fixes (design feedback R3)
+   Overrides on top of the Webflow build, homepage only.
+   ========================================================= */
+
+/* ---------- Hero tabs: desktop hover (mint gradient, inactive tabs only) ---------- */
+.hero__tab_button { isolation: isolate; }
+.hero__tab_button::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(90deg, #e2f7f3 0%, #eefaf8 45%, rgba(255, 255, 255, 0) 100%);
+  opacity: 0; transition: opacity .2s ease;
+}
+@media (hover: hover) and (min-width: 768px) {
+  .hero__tab_button:not(.active):hover::before { opacity: 1; }
+}
+
+/* ---------- Hero tabs: mobile switcher [←] [label] [→] ---------- */
+@media (max-width: 767px) {
+  .hero__tab_nav { box-shadow: none; }
+  .hero__tab_button.active { background-color: #fff; border: 1px solid var(--color-green-cyan, #c8e6e2); font-size: 18px; }
+  .hero__tab_button__progress { display: none; }
+  .hero__tab_nav_button { background: #fff; transition: opacity .2s ease, border-color .2s ease; }
+  .hero__tab_nav_button.is-disabled { cursor: default; pointer-events: none; }
+  .hero__tab_nav_button.is-disabled .hero__tab_nav_button_img { opacity: .3; filter: grayscale(1); }
+  .hero__tab_body { touch-action: pan-y; }
+}
+
+/* ---------- Ecosystem (desktop): sticky stack, equal heights, no fading ---------- */
+.eco2.mtl-eco .eco2__nav { position: sticky; top: var(--mtl-eco-top, 194px); align-self: start; }
+.eco2.mtl-eco .eco2__nav_item { opacity: .4; transition: opacity .3s ease; }
+.eco2.mtl-eco .eco2__nav_item.is-active { opacity: 1; }
+.eco2.mtl-eco .eco2__body_item {
+  position: sticky; top: var(--mtl-eco-top, 194px);
+  height: var(--mtl-eco-h, 600px); transform-origin: 50% 0; will-change: transform;
+}
+.eco2.mtl-eco .eco2__body_item > * { height: 100%; }
+/* card 1 */
+.eco2.mtl-eco .eco2__country { box-sizing: border-box; }
+.eco2.mtl-eco .eco2__country__grid { height: 100%; }
+/* card 2: white card gives its image the space left after the text; dark card spreads its content */
+.eco2.mtl-eco .eco2__body_grid { align-items: stretch; }
+.eco2.mtl-eco .ecosystem__card2 { display: flex; flex-direction: column; }
+.eco2.mtl-eco .ecosystem__card2_media { flex: 1 1 auto; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.eco2.mtl-eco .ecosystem__card2_img { max-height: 100%; width: auto; max-width: 100%; object-fit: contain; }
+.eco2.mtl-eco .ecosystem__card2_body { flex: 0 0 auto; }
+.eco2.mtl-eco .eco2__horizon { display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; }
+/* card 3: content top, visual fills the rest */
+.eco2.mtl-eco .ecosystem__strategy { box-sizing: border-box; align-items: stretch; }
+.eco2.mtl-eco .ecosystem__strategy > .hide_m { display: flex; }
+.eco2.mtl-eco .ecosystem__strategy_media { height: auto; flex: 1 1 auto; display: flex; align-items: center; justify-content: center; }
+
+/* ---------- Ecosystem (phone): one card at a time, same height for all three ---------- */
+@media (max-width: 767px) {
+  .eco2__body_item { min-height: var(--mtl-eco-mh, 0px); }
+  .eco2__body_item > * { min-height: inherit; box-sizing: border-box; }
+  .eco2__body_list { touch-action: pan-y; }
+}
+
+/* ---------- Ecosystem card 2: electric border loops at a constant speed ---------- */
+@keyframes mtlHorizonSpin { from { --horizon-angle: 90deg; } to { --horizon-angle: 450deg; } }
+html body .ecosystem__horizon_card:hover::before { animation: mtlHorizonSpin 3s linear infinite; }
+
+/* ---------- Touch screens: no hover-only effects that get stuck ---------- */
+@media (hover: none) {
+  html body .ecosystem__horizon_card:hover::before { animation: none; }
+  .people__memebr:hover { box-shadow: none; }
+}
+
+/* ---------- Analysts: Figma layout ---------- */
+@media (min-width: 992px) {
+  .people .people__container { max-width: 1240px; }
+  .people .people__grid { justify-content: center; align-items: center; gap: 64px; }
+  .people .people__left_col { flex: 0 1 420px; max-width: 420px; text-align: left; }
+  .people .people__left_col_top { align-items: flex-start; gap: 22px; }
+  .people .people__right_col {
+    flex: 0 0 auto; grid-template-columns: repeat(4, 160px); gap: 26px;
+    position: relative; isolation: isolate;
+  }
+  .people .people__right_col::before {
+    content: ""; position: absolute; inset: -140px -180px; z-index: -1; pointer-events: none;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(200, 184, 255, .55) 0%, rgba(222, 210, 255, .28) 45%, rgba(255, 255, 255, 0) 75%);
+  }
+  .people .people__right_col_cell { gap: 26px; }
+  .people .people__right_col_cell:nth-child(1) { padding-top: 40px; }
+  .people .people__right_col_cell:nth-child(2) { padding-top: 88px; }
+  .people .people__right_col_cell:nth-child(3) { padding-top: 0; }
+  .people .people__right_col_cell:nth-child(4) { padding-top: 50px; }
+  html body .people .people__right_col .people__memebr {
+    padding: 16px 14px 18px; border-radius: 22px;
+    background: rgba(255, 255, 255, .92); box-shadow: 0 12px 30px -20px rgba(12, 42, 43, .35);
+  }
+  .people .people__memebr_img { max-width: 128px; margin-bottom: 10px; }
+  .people .people__memebr .text_size_16_130 { font-size: 14px; }
+}
+
+/* ---------- Testimonial: arrow hover keeps the gradient at 90%; tabs crossfade instead of sliding ---------- */
+.slick_arrow_gradient_lock .slick-arrow { transition: opacity .2s ease; }
+html body .slick_arrow_gradient_lock .slick-arrow:hover,
+html body .slick_arrow_gradient_lock .slick-arrow:focus-visible {
+  background: linear-gradient(223deg, rgb(212, 208, 255) 0%, rgb(210, 253, 247) 100%);
+  opacity: .9;
+}
+.testimonial__name_slider .slick-track { transform: none !important; width: auto !important; display: flex; }
+.testimonial__name_slider .slick-cloned { display: none !important; }
+.testimonial__name_slider .slick-slide,
+.testimonial__name_slider .slick-slide * { transition: background-color .7s ease, color .7s ease, opacity .7s ease; }
