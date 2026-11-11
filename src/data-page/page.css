@@ -6,6 +6,7 @@
 .page_hero__img_container.has-mtl-map { position: relative; overflow: visible; }
 .page_hero__img_container.has-mtl-map > .page_hero__img { display: none; }
 .mtl-hero-mount { width: 100%; }
+.mtl-hero-mount .mtl-map__foot { display: none; }   /* caption + price legend dropped: hard to read over the dots */
 .mtl-hero-mount .mtl-map { aspect-ratio: var(--mtl-hero-ar, 1.68); }
 /* narrow column (tablet): compact card so it fits inside the image box */
 .mtl-hero-mount { container-type: inline-size; }
