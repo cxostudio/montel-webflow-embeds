@@ -1,0 +1,13 @@
+/* =========================================================
+   Montel · Home hero glue
+   No frame: the slide's cards sit straight on the hero background.
+   ========================================================= */
+.hero__tab_body:has(.has-mtl-slides) { border: 0; box-shadow: none; background: none; border-radius: 0; overflow: visible; }
+.hero__tab_content.has-mtl-slides { overflow: visible; }
+.hero__tab_content.has-mtl-slides > img { display: none !important; }
+.mtl-tab-slide { width: 100%; }
+/* phones: only the main card(s), no hard crop edges */
+@media (max-width: 640px) {
+  .mtl-tab-slide .mtl-slide.is-cropped { overflow: visible; border-radius: 0; }
+  .mtl-tab-slide .mtl-layer.mtl-off { display: none; }
+}

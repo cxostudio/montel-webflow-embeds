@@ -44,3 +44,11 @@ One bundle per page: `dist/montel-{analytics,risk,news}.min.{css,js}`. Each swap
 
 - Markup lives in `src/<page>-page/embed.html`. `build/gen-mounts.py` turns it into `mount.js` (run by `build/build.sh`).
 - Photos and video live in `assets/risk/` and `assets/news/`. They load from the same commit as the bundle, so pinning the commit pins the assets too.
+
+## Home hero: five tab slides
+
+`dist/montel-home.min.{css,js}`. The five images in `.hero__tab_content` stay in the page, hidden, and the existing tab script keeps toggling them. Each live slide follows its image's `active` class, so the tab buttons, arrows and progress bars work unchanged.
+
+- The frame around the tab body (border and drop shadow) is removed, so the cards sit directly on the hero background.
+- Below 640px each slide crops to its main card, and cards that fall mostly outside the crop are hidden.
+- Markup: `src/home-page/embed-*.html`, turned into `mount.js` by `build/gen-mounts.py`. Photos: `assets/home/`. Needs GSAP, which the site already loads.

@@ -1,0 +1,126 @@
+/* =========================================================
+   Montel Motion · core styles  (v1.0)
+   Shared by every hero slide. Load once per page.
+   Everything is namespaced under .mtl-slide.
+   ========================================================= */
+
+/* Hide animated cards until the script takes over (prevents a flash).
+   The class is added by the inline head snippet, see README. */
+html.mtl-js .mtl-slide .mtl-card,
+html.mtl-js .mtl-slide .mtl-photo,
+html.mtl-js .mtl-slide .mtl-pop { visibility: hidden; }
+
+.mtl-slide {
+  --ink: #0c2a2b;
+  --ink-2: #284443;
+  --muted: #5f7372;
+  --line: #e4ebe9;
+  --green: #0d6d5c;
+  --green-2: #1a9f82;
+  --green-soft: #8fdcbf;
+  --mint: #e1f5ed;
+  --purple: #6a2ff6;
+  --purple-2: #8a5cff;
+  --purple-soft: #eee7ff;
+  --orange: #f2a21f;
+  --red: #d4483f;
+  --radius: 28px;
+  --shadow:
+    0 1px 1px rgba(12, 42, 43, .03),
+    0 6px 14px -4px rgba(12, 42, 43, .06),
+    0 22px 48px -18px rgba(12, 42, 43, .16);
+
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1600 / 1029;
+  font-family: var(--mtl-font, inherit);
+  color: var(--ink);
+  line-height: 1.2;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "tnum" 1;
+}
+.mtl-slide *, .mtl-slide *::before, .mtl-slide *::after { box-sizing: border-box; }
+.mtl-slide :where(h1,h2,h3,h4,p,ul,ol,li,dl,dt,dd,table,td,th,figure) { margin: 0; padding: 0; font: inherit; }
+
+/* Fixed 1600 x 1029 design canvas, scaled to the container by JS (--mtl-s). */
+.mtl-canvas {
+  position: absolute; left: 0; top: 0;
+  width: 1600px; height: 1029px;
+  transform-origin: 0 0;
+  transform: scale(var(--mtl-s, .5)) translate(var(--mtl-x, 0px), var(--mtl-y, 0px));
+}
+.mtl-slide.is-cropped { overflow: hidden; border-radius: 20px; }
+.mtl-layer { position: absolute; will-change: transform; }
+
+/* ---------- surfaces ---------- */
+.mtl-card {
+  position: relative; width: 100%; height: 100%;
+  background: #fff;
+  border: 1px solid rgba(12, 42, 43, .07);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  will-change: transform, opacity;
+}
+.mtl-card--purple {
+  background: linear-gradient(150deg, #7437ff 0%, #6526f2 100%);
+  border-color: rgba(255, 255, 255, .14);
+  color: #fff;
+  box-shadow: 0 26px 50px -22px rgba(92, 34, 230, .55), 0 6px 16px -6px rgba(70, 20, 190, .3);
+}
+.mtl-photo {
+  position: absolute; inset: 0;
+  border-radius: 30px; overflow: hidden;
+  box-shadow: 0 18px 40px -24px rgba(12, 42, 43, .35);
+}
+.mtl-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mtl-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+
+/* ---------- type ---------- */
+.mtl-title { font-size: 29px; font-weight: 500; letter-spacing: -.012em; }
+.mtl-sub   { font-size: 20px; color: var(--muted); margin-top: 6px; }
+.mtl-label { font-size: 18px; color: var(--muted); }
+.mtl-axis  { font-size: 18px; fill: #6d807e; font-family: var(--mtl-font, inherit); }
+.mtl-grid  { stroke: #edf1f0; stroke-width: 1.4; }
+
+/* ---------- pills, toggles, chips ---------- */
+.mtl-pill {
+  display: inline-flex; align-items: center; gap: 9px;
+  height: 40px; padding: 0 16px; border-radius: 999px;
+  font-size: 19px; font-weight: 500; white-space: nowrap;
+}
+.mtl-pill svg { width: 18px; height: 18px; flex: none; }
+.mtl-pill--glass { background: rgba(255, 255, 255, .17); color: #fff; }
+.mtl-pill--mint { background: var(--mint); color: var(--green); }
+.mtl-pill--lav { background: var(--purple-soft); color: var(--purple); }
+.mtl-pill--grey { background: #f2f4f4; color: var(--ink); }
+.mtl-pill--white { background: #fff; color: var(--ink); border: 1px solid var(--line); box-shadow: 0 6px 16px -10px rgba(12,42,43,.25); }
+.mtl-pill--white svg { color: var(--green); }
+
+.mtl-seg {
+  position: relative; display: inline-flex; padding: 4px;
+  background: #f1f4f3; border-radius: 12px; font-size: 19px;
+}
+.mtl-seg > span { position: relative; z-index: 1; padding: 7px 15px; border-radius: 9px; color: var(--muted); transition: color .35s; white-space: nowrap; }
+.mtl-seg > span.is-on { color: var(--ink); }
+.mtl-seg > i { position: absolute; z-index: 0; top: 4px; bottom: 4px; left: 0; width: 0; background: #fff; border-radius: 9px; box-shadow: 0 1px 3px rgba(12,42,43,.14); }
+.mtl-seg--glass { background: rgba(255,255,255,.15); }
+.mtl-seg--glass > span { color: rgba(255,255,255,.75); }
+.mtl-seg--glass > span.is-on { color: var(--purple); }
+
+.mtl-up { color: var(--green); }
+.mtl-down { color: var(--red); }
+
+.mtl-live-dot { width: 10px; height: 10px; border-radius: 50%; background: #ff4a4a; animation: mtl-ping 1.8s infinite; }
+@keyframes mtl-ping {
+  0% { box-shadow: 0 0 0 0 rgba(255, 74, 74, .55); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 74, 74, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 74, 74, 0); }
+}
+.mtl-flash-up { animation: mtl-fu .9s ease; }
+.mtl-flash-down { animation: mtl-fd .9s ease; }
+@keyframes mtl-fu { 0% { color: var(--green-2); text-shadow: 0 0 12px rgba(26,159,130,.45); } }
+@keyframes mtl-fd { 0% { color: var(--red); text-shadow: 0 0 12px rgba(212,72,63,.35); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .mtl-live-dot { animation: none; }
+}

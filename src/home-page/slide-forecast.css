@@ -1,0 +1,45 @@
+/* Montel hero · Slide 2 · Analyse & forecast */
+.mtl-fc__chart { padding: 38px 40px; }
+.mtl-fc__head { display: flex; justify-content: space-between; align-items: flex-start; }
+.mtl-fc__head .mtl-seg { margin-top: 12px; }
+.mtl-fc__legend { display: flex; gap: 26px; margin-top: 28px; font-size: 19px; color: var(--muted); }
+.mtl-fc__legend span { display: inline-flex; align-items: center; gap: 12px; }
+.mtl-fc__sw { display: inline-block; width: 24px; height: 4px; border-radius: 2px; }
+.mtl-fc__sw--act { background: #0b3a37; }
+.mtl-fc__sw--fc { background: var(--green); }
+.mtl-fc__sw--norm { background: repeating-linear-gradient(90deg, var(--purple-2) 0 6px, transparent 6px 9px); height: 3px; }
+.mtl-fc__sw--band { background: #bfeedd; height: 16px; border-radius: 3px; }
+
+.mtl-fc__tip {
+  position: absolute; left: 629px; top: 238px; width: 266px;
+  padding: 18px 20px; border-radius: 18px;
+  background: #0b3031; color: #fff;
+  box-shadow: 0 18px 36px -14px rgba(8, 30, 31, .55);
+  font-size: 20px; pointer-events: none;
+}
+.mtl-fc__tip-t { font-weight: 500; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,.12); margin-bottom: 10px !important; }
+.mtl-fc__tip > div { display: flex; justify-content: space-between; padding: 6px 0; }
+.mtl-fc__tip > div span { color: rgba(255,255,255,.66); }
+.mtl-fc__tip b { font-weight: 600; }
+
+.mtl-fc__model { padding: 24px 28px; }
+.mtl-fc__model-top { display: flex; justify-content: space-between; align-items: center; font-size: 20px; color: rgba(255,255,255,.82); }
+.mtl-fc__model-top .mtl-seg { font-size: 18px; }
+.mtl-fc__model-top .mtl-seg > span { padding: 5px 11px; }
+.mtl-fc__alert { display: flex; align-items: center; gap: 16px; margin-top: 11px; }
+.mtl-fc__bell { width: 46px; height: 46px; border-radius: 12px; background: rgba(255,255,255,.17); display: grid; place-items: center; flex: none; }
+.mtl-fc__bell svg { width: 22px; height: 22px; }
+.mtl-fc__alert-t { font-size: 29px; font-weight: 500; letter-spacing: -.01em; }
+.mtl-fc__alert-s { font-size: 20px; color: rgba(255,255,255,.82); margin-top: 4px !important; }
+
+.mtl-fc__speed { padding: 30px 30px 20px; }
+.mtl-fc__speed-head { display: flex; gap: 15px; align-items: center; }
+.mtl-fc__icon { width: 46px; height: 46px; border-radius: 12px; background: var(--mint); color: var(--green); display: grid; place-items: center; flex: none; }
+.mtl-fc__icon svg { width: 24px; height: 24px; }
+.mtl-fc__speed-t { font-size: 23px; font-weight: 500; }
+.mtl-fc__speed .mtl-sub { margin-top: 4px; }
+.mtl-fc__bars { position: absolute; left: 30px; right: 30px; bottom: 18px; height: 140px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; align-items: end; }
+.mtl-fc__bars > div { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-end; height: 100%; }
+.mtl-fc__bars i { display: block; height: var(--h); border-radius: 7px 7px 3px 3px; background: linear-gradient(180deg, #8fdfc0, #c9f1e1); transform-origin: 50% 100%; }
+.mtl-fc__bars .is-low i { background: linear-gradient(180deg, #7a3cff, #6a2ff6); }
+.mtl-fc__bars span { font-size: 19px; color: var(--muted); text-align: center; margin-top: 12px; }

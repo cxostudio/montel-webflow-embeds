@@ -1,0 +1,30 @@
+/* Montel hero · Slide 1 · Trade the market */
+.mtl-trade__news { padding: 26px 28px; border-radius: 26px; }
+.mtl-trade__tags { display: flex; align-items: center; gap: 12px; }
+.mtl-trade__time { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 21px; }
+.mtl-trade__headline { margin-top: 16px !important; font-size: 29px; line-height: 36px; font-weight: 500; letter-spacing: -.01em; }
+
+.mtl-trade__price { padding: 34px 36px; }
+.mtl-trade__head { display: flex; justify-content: space-between; align-items: flex-start; }
+.mtl-trade__head .mtl-seg { margin-top: 8px; }
+.mtl-trade__table { margin-top: 18px; }
+.mtl-trade__row {
+  position: relative;
+  display: grid; grid-template-columns: 165px 100px 117px 119px 130px;
+  padding: 0 13px 0 12px; height: 57px; align-items: center;
+  font-size: 23px; border-top: 1px solid var(--line);
+}
+.mtl-trade__row > :not(:first-child) { text-align: right; }
+.mtl-trade__row > b { font-weight: 600; }
+.mtl-trade__row--th { height: 22px; font-size: 18px; color: var(--muted); border-top: 0; margin-bottom: 10px; }
+.mtl-trade__row.is-hl { border-top: 0; border-radius: 12px; }
+.mtl-trade__row.is-hl::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 14px;
+  border-left: 4px solid var(--green); border-radius: 12px 0 0 12px; transform-origin: 0 50%;
+  transform: scaleY(var(--acc, 1));
+}
+.mtl-trade__row.is-hl + .mtl-trade__row { border-top-color: transparent; }
+
+.mtl-trade__moved { display: flex; align-items: center; gap: 13px; padding: 0 20px 0 27px; border-radius: 22px; }
+.mtl-trade__moved .mtl-label { font-size: 20px; margin-right: auto; }
+.mtl-trade__moved .mtl-pill { height: 46px; }

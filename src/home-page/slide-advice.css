@@ -1,0 +1,21 @@
+/* Montel hero · Slide 5 · Get expert advice */
+.mtl-adv__q { padding: 26px 30px; border-radius: 26px; }
+.mtl-adv__ql { display: flex; align-items: center; gap: 11px; font-size: 19px; color: rgba(255,255,255,.8); }
+.mtl-adv__ql svg { width: 22px; height: 22px; }
+.mtl-adv__qt { margin-top: 12px !important; font-size: 29px; line-height: 37px; font-weight: 500; letter-spacing: -.01em; max-width: 520px; }
+.mtl-adv__qt .w { display: inline-block; }
+
+.mtl-adv__brief { padding: 34px 30px; }
+.mtl-adv__head { display: flex; justify-content: space-between; align-items: center; }
+.mtl-adv__tag { height: 38px; font-size: 19px; padding: 0 15px; }
+.mtl-adv__brief > .mtl-sub { margin-top: 8px; }
+.mtl-adv__notes { position: absolute; left: 30px; right: 26px; top: 414px; list-style: none; }
+.mtl-adv__notes li { display: grid; grid-template-columns: 32px 1fr; gap: 18px; align-items: start; }
+.mtl-adv__notes li + li { margin-top: 18px; }
+.mtl-adv__notes li > span { width: 32px; height: 32px; border-radius: 50%; background: var(--orange); color: #3b2500; font-size: 17px; font-weight: 600; display: grid; place-items: center; margin-top: -1px; }
+.mtl-adv__notes b { display: block; font-size: 21px; font-weight: 500; }
+.mtl-adv__notes p { font-size: 19px; color: var(--muted); line-height: 26px; margin-top: 3px !important; max-width: 372px; }
+
+.mtl-adv__chips { display: flex; gap: 13px; }
+.mtl-adv__chips .mtl-pill { height: 41px; padding: 0 15px; gap: 9px; transition: box-shadow .4s, border-color .4s; }
+.mtl-adv__chips .mtl-pill.is-on { border-color: var(--green-2); box-shadow: 0 0 0 3px rgba(26,159,130,.15), 0 6px 16px -10px rgba(12,42,43,.25); }

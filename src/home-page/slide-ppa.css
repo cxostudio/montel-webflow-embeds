@@ -1,0 +1,45 @@
+/* Montel hero · Slide 4 · Secure & price PPAs */
+.mtl-ppa__party { border-radius: 24px; overflow: visible; }
+.mtl-ppa__img { height: 121px; border-radius: 24px 24px 0 0; overflow: hidden; }
+.mtl-ppa__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mtl-ppa__icon {
+  position: absolute; left: 26px; top: 86px; width: 66px; height: 66px; border-radius: 17px;
+  background: #fff; color: var(--green); display: grid; place-items: center;
+  box-shadow: 0 8px 22px -10px rgba(12,42,43,.4), inset 0 0 0 6px var(--mint);
+}
+.mtl-ppa__icon svg { width: 30px; height: 30px; }
+.mtl-ppa__icon--p { color: var(--purple); box-shadow: 0 8px 22px -10px rgba(12,42,43,.4), inset 0 0 0 6px var(--purple-soft); }
+.mtl-ppa__body { padding: 50px 26px 0; }
+.mtl-ppa__body .mtl-sub { margin-top: 4px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+.mtl-ppa__needs { font-size: 19px; color: var(--muted); margin-top: 17px !important; }
+.mtl-ppa__need { font-size: 21px; margin-top: 4px !important; }
+
+.mtl-ppa__flowtag {
+  position: absolute; height: 34px; padding: 0 12px; display: inline-flex; align-items: center;
+  background: #fff; border: 1px solid var(--line); border-radius: 999px;
+  font-size: 18px; font-weight: 500; color: var(--green); white-space: nowrap;
+  box-shadow: 0 6px 14px -8px rgba(12,42,43,.25);
+}
+.mtl-ppa__flowtag--p { color: var(--purple); }
+
+.mtl-ppa__check { padding: 34px 36px; }
+.mtl-ppa__head { display: flex; justify-content: space-between; align-items: center; }
+.mtl-ppa__ok { height: 37px; font-size: 19px; padding: 0 14px; gap: 10px; }
+.mtl-ppa__ok svg { width: 20px; height: 20px; }
+.mtl-ppa__tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 22px; }
+.mtl-ppa__tiles > div { background: #f2f5f4; border-radius: 14px; padding: 12px 15px; height: 75px; }
+.mtl-ppa__tiles > div > span { display: block; font-size: 17px; color: var(--muted); }
+.mtl-ppa__tiles b { display: block; font-size: 21px; font-weight: 500; margin-top: 6px; }
+.mtl-ppa__lbl { position: absolute; left: 36px; font-size: 19px; color: var(--muted); }
+.mtl-ppa__key { position: absolute; right: 36px; top: 371px; display: flex; gap: 16px; font-size: 17px; color: var(--muted); }
+.mtl-ppa__key span { display: inline-flex; align-items: center; gap: 8px; }
+.mtl-ppa__key-o { width: 14px; height: 14px; border-radius: 3px; background: #b9ecd6; }
+.mtl-ppa__key-p { width: 18px; height: 4px; border-radius: 2px; background: var(--purple); }
+
+.mtl-ppa__cap {
+  display: grid; grid-template-columns: 193px 158px 1fr; padding: 22px 0 0 31px;
+  background: #fde4bc; border-color: #f4cb88; border-radius: 22px;
+  box-shadow: 0 18px 36px -18px rgba(150,95,10,.35);
+}
+.mtl-ppa__cap span { display: block; font-size: 17px; color: #6b5532; }
+.mtl-ppa__cap b { display: block; font-size: 27px; font-weight: 500; margin-top: 6px; color: var(--ink); }

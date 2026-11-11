@@ -15,3 +15,8 @@ for p in analytics:montel-fa risk:montel-risk news:montel-news; do
   cat src/$page-page/$m.css src/shared/hero.css | $E --minify --loader=css > dist/montel-$page.min.css
 done
 wc -c dist/*
+
+# Home: core first, then the five slides
+cat src/home-page/mount.js src/home-page/montel-motion-core.js src/home-page/slide-trade.js src/home-page/slide-forecast.js src/home-page/slide-assets.js src/home-page/slide-ppa.js src/home-page/slide-advice.js | $E --minify --loader=js > dist/montel-home.min.js
+cat src/home-page/montel-motion-core.css src/home-page/slide-*.css src/home-page/page.css | $E --minify --loader=css > dist/montel-home.min.css
+wc -c dist/montel-home.*
