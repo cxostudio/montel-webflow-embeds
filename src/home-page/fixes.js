@@ -87,7 +87,7 @@
         H = Math.round(Math.min(640, Math.max(520, window.innerHeight - top - 40)));
         sec.style.setProperty('--mtl-eco-top', top + 'px');
         sec.style.setProperty('--mtl-eco-h', H + 'px');
-        hold = Math.round(H * .45);
+        hold = 160;
         sec.style.setProperty('--mtl-eco-hold', hold + 'px');
         gap = parseFloat(getComputedStyle(list).rowGap) || 0;
         sec.style.setProperty('--mtl-eco-gap', gap + 'px');
