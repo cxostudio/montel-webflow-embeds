@@ -94,10 +94,6 @@ html body .ecosystem__horizon_card:hover::before { animation: mtlHorizonSpin 3s 
   .people .people__memebr_img { max-width: 144px; margin-bottom: 10px; }
   .people .people__memebr .text_size_16_130 { font-size: 15px; }
 }
-@media (min-width: 992px) and (max-width: 1279px) {
-  .people .people__right_col { grid-template-columns: repeat(4, 150px); gap: 20px; }
-  .people .people__left_col { flex-basis: 380px; }
-}
 
 /* ---------- Testimonial + Analysts: on the page grid like every other section ---------- */
 .testimonial .testimonial__container, .people .people__container { max-width: none; }
@@ -162,3 +158,20 @@ html body .slick_arrow_gradient_lock .slick-arrow:focus-visible {
 
 /* ---------- Homepage: Why Montel and Coverage sections hidden (still in Webflow, delete there to remove for good) ---------- */
 main > section.cta, main > section.coverage { display: none !important; }
+
+/* ---------- Fit to the 1200px content grid (laptop-friendly layout) ---------- */
+@media (min-width: 992px) {
+  .eco2 .eco2__country_left { flex: 0 0 clamp(250px, 24vw, 330px); }
+  .eco2 .eco_country__center { flex: 1 1 0; min-width: 0; width: auto; }
+  .people .people__right_col { grid-template-columns: repeat(4, 160px); gap: 24px; }
+  .people .people__right_col_cell { gap: 24px; }
+  .people .people__memebr_img { max-width: 128px; }
+  .people .people__grid { gap: 56px; }
+}
+@media (min-width: 992px) and (max-width: 1279px) {
+  .people .people__right_col { grid-template-columns: repeat(4, 140px); gap: 18px; }
+}
+/* the left nav only exists from 1280px; below that the site uses one column */
+@media (min-width: 1281px) {
+  .eco2 .eco2__grid { grid-template-columns: minmax(200px, 250px) minmax(0, 1fr); column-gap: 40px; }
+}
