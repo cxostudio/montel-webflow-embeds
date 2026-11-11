@@ -6,6 +6,19 @@
 .page_hero__img_container.has-mtl-map { position: relative; overflow: visible; }
 .page_hero__img_container.has-mtl-map > .page_hero__img { display: none; }
 .mtl-hero-mount { width: 100%; }
+.mtl-hero-mount .mtl-map { aspect-ratio: var(--mtl-hero-ar, 1.68); }
+/* narrow column (tablet): compact card so it fits inside the image box */
+.mtl-hero-mount { container-type: inline-size; }
+@container (max-width: 640px) {
+  .mtl-hero-mount .mtl-map__rows, .mtl-hero-mount .mtl-map__news, .mtl-hero-mount .mtl-map__foot, .mtl-hero-mount .mtl-map__seg { display: none; }
+  .mtl-hero-mount .mtl-map__card { padding: 16px 16px 14px; width: clamp(220px, 44%, 300px); }
+}
+/* phone: the map alone, at the image's proportions */
+@media (max-width: 760px) {
+  .mtl-hero-mount .mtl-map { aspect-ratio: auto; }
+  .mtl-hero-mount .mtl-map__stage { aspect-ratio: var(--mtl-hero-ar, 1.68); }
+  .mtl-hero-mount .mtl-map__card, .mtl-hero-mount .mtl-map__foot, .mtl-hero-mount .mtl-map__ping { display: none; }
+}
 
 /* explore by country: map fills the media column */
 .explore_country__media { position: relative; border-radius: 30px; overflow: hidden; min-height: 560px; }
