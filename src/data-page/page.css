@@ -1,0 +1,28 @@
+/* =========================================================
+   Montel · Data page glue (layout around the animations)
+   ========================================================= */
+/* hero: the live map replaces the static image */
+.page_hero__img_container .page_hero__img { visibility: hidden; }
+.page_hero__img_container.has-mtl-map { position: relative; overflow: visible; }
+.page_hero__img_container.has-mtl-map > .page_hero__img { display: none; }
+.mtl-hero-mount { width: 100%; }
+
+/* explore by country: map fills the media column */
+.explore_country__media { position: relative; border-radius: 30px; overflow: hidden; min-height: 560px; }
+.explore_country__media > .w-embed { position: absolute; inset: 0; }
+@media (max-width: 767px) { .explore_country__media { min-height: 440px; } }
+
+/* explore by country: CMS panel follows the static panel's rules */
+[data-mtl-cov-item] { display: flex; flex-direction: column; gap: 48px; }
+[data-mtl-cov-item] [data-mtl-cov-count] { margin: 0; }
+.explore_country__cms_title strong { font-weight: inherit; background-image: linear-gradient(90deg, #002e33 0%, #008a99 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; -webkit-box-decoration-break: slice; box-decoration-break: slice; }
+.explore_country__cms_title strong > span:first-child::after { content: " "; }
+[data-mtl-cov-item]:is(:not([data-power]),[data-power=""]) [data-mtl-cov-row=power],
+[data-mtl-cov-item]:is(:not([data-gas]),[data-gas=""]) [data-mtl-cov-row=gas],
+[data-mtl-cov-item]:is(:not([data-carbon]),[data-carbon=""]) [data-mtl-cov-row=carbon],
+[data-mtl-cov-item]:is(:not([data-fund]),[data-fund=""]) [data-mtl-cov-row=fund] { display: none; }
+.explore_country__info .explore_country__info_list > [data-mtl-cov-row] > .explore_country__info_item > .explore_country__info_item_inner { border-bottom: 1px solid var(--color-light-gray); padding-bottom: 12px; }
+.explore_country__info .explore_country__info_list > [data-mtl-cov-row=fund] > .explore_country__info_item > .explore_country__info_item_inner,
+.explore_country__info [data-mtl-cov-item]:is(:not([data-fund]),[data-fund=""]) .explore_country__info_list > [data-mtl-cov-row=carbon] > .explore_country__info_item > .explore_country__info_item_inner,
+.explore_country__info [data-mtl-cov-item]:is(:not([data-fund]),[data-fund=""]):is(:not([data-carbon]),[data-carbon=""]) .explore_country__info_list > [data-mtl-cov-row=gas] > .explore_country__info_item > .explore_country__info_item_inner,
+.explore_country__info [data-mtl-cov-item]:is(:not([data-fund]),[data-fund=""]):is(:not([data-carbon]),[data-carbon=""]):is(:not([data-gas]),[data-gas=""]) .explore_country__info_list > [data-mtl-cov-row=power] > .explore_country__info_item > .explore_country__info_item_inner { border: 0; padding: 0; }

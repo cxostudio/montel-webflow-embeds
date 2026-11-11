@@ -1,0 +1,122 @@
+/* =========================================================
+   Montel Markets · hero map  (v1.0)
+   Dot map of Europe that blends into the hero background.
+   Namespaced under .mtl-map. No dependencies.
+   ========================================================= */
+.mtl-map {
+  --ink: #0c2a2b;
+  --muted: #5f7372;
+  --line: #e4ebe9;
+  --green: #0d6d5c;
+  --green-2: #1a9f82;
+  --mint: #e1f5ed;
+  --purple: #6a2ff6;
+  --purple-soft: #eee7ff;
+  --red: #c8473e;
+  /* how far the dots bleed outside the component box */
+  --bleed-l: 34%; --bleed-r: 26%; --bleed-t: 16%; --bleed-b: 16%;
+
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / .86;
+  font-family: var(--mtl-font, inherit);
+  color: var(--ink);
+  line-height: 1.2;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "tnum" 1;
+}
+.mtl-map *, .mtl-map *::before, .mtl-map *::after { box-sizing: border-box; }
+.mtl-map :where(h3, p, ul, li) { margin: 0; padding: 0; font: inherit; list-style: none; }
+
+.mtl-map__canvas {
+  position: absolute;
+  left: calc(var(--bleed-l) * -1); right: calc(var(--bleed-r) * -1);
+  top: calc(var(--bleed-t) * -1); bottom: calc(var(--bleed-b) * -1);
+  width: calc(100% + var(--bleed-l) + var(--bleed-r));
+  height: calc(100% + var(--bleed-t) + var(--bleed-b));
+  display: block;
+  /* soft edges so the map dissolves into the hero gradient */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 17%, #000 88%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 14%, #000 84%, transparent 100%);
+  -webkit-mask-composite: source-in;
+          mask-image: linear-gradient(90deg, transparent 0%, #000 17%, #000 88%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 14%, #000 84%, transparent 100%);
+          mask-composite: intersect;
+  pointer-events: auto;
+}
+
+/* ---------- market card (from the design team's card) ---------- */
+.mtl-map__card {
+  position: absolute; right: 0; top: 13%;
+  width: clamp(300px, 46%, 392px);
+  background: rgba(255, 255, 255, .96);
+  border: 1px solid rgba(12, 42, 43, .07);
+  border-radius: 22px;
+  padding: 22px 22px 18px;
+  box-shadow: 0 1px 1px rgba(12,42,43,.03), 0 8px 18px -6px rgba(12,42,43,.08), 0 30px 60px -24px rgba(12,42,43,.28);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  z-index: 2;
+}
+.mtl-map__head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.mtl-map__name { font-size: 22px; font-weight: 500; letter-spacing: -.01em; white-space: nowrap; }
+.mtl-map__seg { display: inline-flex; padding: 3px; border-radius: 10px; background: #f1f4f3; font-size: 13px; }
+.mtl-map__seg span { padding: 5px 9px; border-radius: 7px; color: var(--muted); }
+.mtl-map__seg span.is-on { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(12,42,43,.14); }
+.mtl-map__label { font-size: 13px; color: var(--muted); margin-top: 14px !important; }
+.mtl-map__price { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+.mtl-map__value { font-size: 34px; font-weight: 500; letter-spacing: -.02em; }
+.mtl-map__chg { font-size: 13px; font-weight: 600; padding: 5px 9px; border-radius: 999px; background: var(--mint); color: var(--green); transition: background .4s, color .4s; }
+.mtl-map__chg.is-down { background: #fdecea; color: var(--red); }
+
+.mtl-map__rows { margin-top: 14px !important; border-top: 1px solid var(--line); }
+.mtl-map__row { display: grid; grid-template-columns: 70px 1fr 64px; align-items: center; gap: 12px; height: 34px; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+.mtl-map__row:last-child { border-bottom: 0; }
+.mtl-map__row span:first-child { color: var(--muted); }
+.mtl-map__row b { font-weight: 500; text-align: right; }
+.mtl-map__bar { height: 6px; border-radius: 6px; background: #eef2f1; overflow: hidden; }
+.mtl-map__bar i { display: block; height: 100%; width: 0; border-radius: 6px; background: var(--c, var(--green-2)); }
+
+.mtl-map__news { margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: #fde9c8; overflow: hidden; }
+.mtl-map__news-k { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: #7a5a24; }
+.mtl-map__news-k svg { width: 14px; height: 14px; }
+.mtl-map__news-t { font-size: 15.5px; font-weight: 500; line-height: 1.3; margin-top: 5px !important; color: #2a2414; min-height: 2.6em; }
+
+.mtl-map__fade { transition: opacity .35s ease, transform .35s ease; }
+.mtl-map__fade.is-out { opacity: 0; transform: translateY(6px); }
+
+/* ---------- floating bits ---------- */
+.mtl-map__ping {
+  position: absolute; left: 0; top: 0; z-index: 3; pointer-events: none;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 11px; border-radius: 999px; background: #fff; color: #7a5a24;
+  font-size: 12.5px; font-weight: 500; white-space: nowrap;
+  box-shadow: 0 10px 24px -10px rgba(12,42,43,.35), 0 0 0 1px rgba(12,42,43,.05);
+  opacity: 0; transform: translate(-50%, -100%);
+}
+.mtl-map__ping svg { width: 13px; height: 13px; }
+.mtl-map__tip {
+  position: absolute; left: 0; top: 0; z-index: 3; pointer-events: none;
+  padding: 7px 10px; border-radius: 10px; background: #0b3031; color: #fff; font-size: 12.5px; white-space: nowrap;
+  opacity: 0; transform: translate(-50%, calc(-100% - 12px)); transition: opacity .2s;
+}
+.mtl-map__tip b { font-weight: 600; margin-left: 6px; }
+.mtl-map__foot {
+  position: absolute; left: 0; bottom: -2%; z-index: 2;
+  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  font-size: 13px; color: var(--muted);
+}
+.mtl-map__scale { display: inline-flex; align-items: center; gap: 6px; }
+.mtl-map__scale i { width: 9px; height: 9px; border-radius: 50%; }
+
+/* ---------- small screens: card under the map ---------- */
+@media (max-width: 760px) {
+  .mtl-map { aspect-ratio: auto; display: flex; flex-direction: column; }
+  .mtl-map__stage { position: relative; aspect-ratio: 1 / .82; }
+  .mtl-map { --bleed-l: 4%; --bleed-r: 4%; --bleed-t: 6%; --bleed-b: 6%; }
+  .mtl-map__card { position: relative; right: auto; top: auto; width: 100%; margin-top: 8px; }
+  .mtl-map__foot { position: relative; bottom: auto; margin-top: 14px; }
+}
+.mtl-map__stage { position: absolute; inset: 0; }
+@media (max-width: 760px) { .mtl-map__stage { position: relative; inset: auto; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .mtl-map__fade { transition: opacity .2s; transform: none !important; }
+}

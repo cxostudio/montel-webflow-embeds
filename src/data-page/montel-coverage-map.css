@@ -1,0 +1,49 @@
+/* =========================================================
+   Montel · Explore by country · coverage map  (v2.0)
+   ========================================================= */
+.mtl-covmap {
+  --ink: #0c2a2b; --muted: #5f7372; --pine: #0d6d5c; --mint: #55bf9f; --mint-soft: #d6f3ea; --line: rgba(12,42,43,.08);
+  position: relative; width: 100%; height: 100%; min-height: 420px; overflow: hidden; border-radius: inherit;
+  background:
+    radial-gradient(70% 60% at 30% 25%, rgba(169,230,204,.35), transparent 70%),
+    radial-gradient(60% 55% at 85% 90%, rgba(165,140,242,.16), transparent 70%),
+    #fff;
+  border: 1px solid var(--line);
+  font-family: var(--mtl-font, inherit); color: var(--ink); line-height: 1.2; -webkit-font-smoothing: antialiased;
+}
+.mtl-covmap * { box-sizing: border-box; }
+.mtl-covmap__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: manipulation; }
+.mtl-covmap__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* picker: same white pill language as the hero segmented control */
+.mtl-covmap__pick { position: absolute; left: 20px; top: 20px; z-index: 3; }
+.mtl-covmap__pick select { appearance: none; -webkit-appearance: none; font: inherit; font-size: 15px; font-weight: 500; color: var(--ink);
+  background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 10px 40px 10px 16px; cursor: pointer;
+  box-shadow: 0 1px 1px rgba(12,42,43,.03), 0 8px 18px -10px rgba(12,42,43,.18); }
+.mtl-covmap__pick::after { content: ""; position: absolute; right: 17px; top: 50%; width: 7px; height: 7px; border-right: 1.8px solid var(--pine); border-bottom: 1.8px solid var(--pine); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+
+/* label: hero card, small */
+.mtl-covmap__label { position: absolute; left: 0; top: 0; z-index: 2; pointer-events: none; padding: 12px 14px 12px; background: rgba(255,255,255,.96);
+  border: 1px solid var(--line); border-radius: 16px; white-space: nowrap; opacity: 0;
+  box-shadow: 0 1px 1px rgba(12,42,43,.03), 0 10px 22px -10px rgba(12,42,43,.22), 0 30px 60px -34px rgba(12,42,43,.35);
+  transition: opacity .25s, transform .45s cubic-bezier(.22,1,.36,1); }
+.mtl-covmap__label.is-in { opacity: 1; }
+.mtl-covmap__label b { display: block; font-size: 17px; font-weight: 500; letter-spacing: -.01em; }
+.mtl-covmap__label span { display: flex; gap: 6px; margin-top: 8px; }
+.mtl-covmap__label em { font-style: normal; font-size: 13px; line-height: 1; padding: 6px 10px; border-radius: 100px; background: var(--mint-soft); color: var(--ink); }
+
+/* legend */
+.mtl-covmap__legend { position: absolute; left: 20px; bottom: 16px; z-index: 2; display: flex; gap: 14px; font-size: 13px; color: var(--muted); pointer-events: none; }
+.mtl-covmap__legend span { display: inline-flex; align-items: center; gap: 6px; }
+.mtl-covmap__legend i { width: 8px; height: 8px; border-radius: 50%; background: #b9c9c5; }
+.mtl-covmap__legend i.is-on { background: var(--mint); }
+.mtl-covmap__legend i.is-sel { background: var(--pine); }
+@media (max-width: 560px) { .mtl-covmap__legend { font-size: 12px; gap: 10px; left: 16px; } .mtl-covmap__pick { left: 16px; top: 16px; } }
+
+.mtl-covmap :focus-visible { outline: 2px solid #6a2ff6; outline-offset: 2px; }
+
+/* CMS panel items: only the selected country once the map runs */
+html.mtl-covmap-on [data-mtl-cov-item]:not(.is-active) { display: none !important; }
+html.mtl-covmap-on [data-mtl-cov-item].is-active { animation: mtl-covmap-in .4s cubic-bezier(.22,1,.36,1) both; }
+@keyframes mtl-covmap-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { html.mtl-covmap-on [data-mtl-cov-item].is-active { animation: none; } .mtl-covmap__label { transition: none; } }
