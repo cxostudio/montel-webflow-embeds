@@ -99,13 +99,26 @@ html body .ecosystem__horizon_card:hover::before { animation: mtlHorizonSpin 3s 
   .people .people__left_col { flex-basis: 380px; }
 }
 
-/* ---------- Testimonial: arrow hover keeps the gradient at 90%; tabs crossfade instead of sliding ---------- */
-.slick_arrow_gradient_lock .slick-arrow { transition: opacity .2s ease; }
+/* ---------- Testimonial + Analysts: on the page grid like every other section ---------- */
+.testimonial .testimonial__container, .people .people__container { max-width: none; }
+
+/* ---------- Testimonial arrows: same hover as the primary gradient CTA ---------- */
+.slick_arrow_gradient_lock .slick-arrow { overflow: hidden; transition: background .2s ease, box-shadow .2s ease; }
+.slick_arrow_gradient_lock .slick-next { --mtl-dir: 1; }
+.slick_arrow_gradient_lock .slick-prev { --mtl-dir: -1; }
 html body .slick_arrow_gradient_lock .slick-arrow:hover,
 html body .slick_arrow_gradient_lock .slick-arrow:focus-visible {
-  background: linear-gradient(223deg, rgb(212, 208, 255) 0%, rgb(210, 253, 247) 100%);
-  opacity: .9;
+  background: linear-gradient(223deg, var(--color-lavender-blue-300, #e4e2ff), var(--color-mint-frost-300, #dffcf8));
+  box-shadow: inset 0 0 0 1px #fff, rgba(0, 0, 0, .04) 0 16px 24px 0, rgba(0, 0, 0, .03) 0 4px 6px 0;
 }
+.slick_arrow_gradient_lock .slick-arrow:hover::after { animation: mtlArrowThrough .4s ease; }
+@keyframes mtlArrowThrough {
+  0% { translate: 0 0; opacity: 1; }
+  45% { translate: calc(var(--mtl-dir, 1) * 140%) 0; opacity: 0; }
+  55% { translate: calc(var(--mtl-dir, 1) * -140%) 0; opacity: 0; }
+  100% { translate: 0 0; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .slick_arrow_gradient_lock .slick-arrow:hover::after { animation: none; } }
 .testimonial__name_slider .slick-track { transform: none !important; width: auto !important; display: flex; }
 .testimonial__name_slider .slick-cloned { display: none !important; }
 .testimonial__name_slider .slick-slide,
