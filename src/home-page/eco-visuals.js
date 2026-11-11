@@ -46,7 +46,7 @@
       var s = Math.min(w / W, h / H) * (fill || 1);
       canvas.style.transform = 'translate(' + ((w - W * s) / 2).toFixed(1) + 'px,' + ((h - H * s) / 2).toFixed(1) + 'px) scale(' + s.toFixed(4) + ')';
     }
-    new ResizeObserver(fit).observe(root); fit();
+    var fr = 0; new ResizeObserver(function () { if (!fr) fr = requestAnimationFrame(function () { fr = 0; fit(); }); }).observe(root); fit();
     var api = { root: root, canvas: canvas, visible: false, onShow: null, onHide: null };
     new IntersectionObserver(function (es) {
       var v = es[es.length - 1].isIntersecting;

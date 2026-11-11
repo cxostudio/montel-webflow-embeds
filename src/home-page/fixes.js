@@ -168,11 +168,12 @@
       if (window.innerWidth >= 768) { sec.style.removeProperty('--mtl-eco-mh'); return; }
       sec.style.setProperty('--mtl-eco-mh', '0px');
       var max = 0;
+      var w = list ? list.clientWidth : 0;
       all.forEach(function (el) {
-        var d = el.style.display, v = el.style.visibility, p = el.style.position;
-        if (getComputedStyle(el).display === 'none') { el.style.visibility = 'hidden'; el.style.position = 'absolute'; el.style.display = 'block'; }
+        var d = el.style.display, v = el.style.visibility, p = el.style.position, wd = el.style.width;
+        if (getComputedStyle(el).display === 'none') { el.style.visibility = 'hidden'; el.style.position = 'absolute'; el.style.display = 'block'; if (w) el.style.width = w + 'px'; }
         max = Math.max(max, el.offsetHeight);
-        el.style.display = d; el.style.visibility = v; el.style.position = p;
+        el.style.display = d; el.style.visibility = v; el.style.position = p; el.style.width = wd;
       });
       sec.style.setProperty('--mtl-eco-mh', max + 'px');
     }
@@ -196,6 +197,9 @@
       var mm = gsap.matchMedia();
       mm.add('(min-width: 992px)', desktop);
       phoneHeights();
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(phoneHeights);
+      setTimeout(phoneHeights, 800);
+      var li; if (list) list.addEventListener('load', function () { clearTimeout(li); li = setTimeout(phoneHeights, 100); }, true);
       /* the site's phone slider decides at DOM ready; run its resize handler once so it matches the final width */
       if (window.innerWidth < 768 && $) $(window).trigger('resize');
       var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(phoneHeights, 150); });
