@@ -150,3 +150,7 @@
 /* card 3 host: no border, text centred against the visual */
 .ecosystem__strategy_media.has-mtl-ev > .gradient_block_bordered { display: none; }
 .eco2.mtl-eco .ecosystem__strategy_right { justify-content: center; }
+
+/* ---------- data section: signal from noise ---------- */
+.mtl-signal { position: absolute; top: 0; left: 0; height: 100%; display: block; }
+.data__aniimation { overflow: visible; }
