@@ -65,3 +65,4 @@ Part of the home bundle. The site-wide scripts in Webflow stay untouched; where 
 - Analysts: Figma layout on desktop on the page grid (text flush left, card grid flush right, staggered 180px cards, lilac glow), 120px top padding like the other sections.
 - Testimonials: on the page grid (container cap removed, same for Analysts); arrow hover matches the gradient primary CTA (lighter gradient, white edge, arrow slides through); 700ms crossfade; company tabs no longer slide.
 - Card visuals: market (card 1, follows the active flag via `MontelEco.setMarket(code|index)` and the `mtl:market` event), live imbalance (card 2), price scenarios (card 3, vertical: chips, scenario chart, portfolio value that follows the highlighted scenario; border removed, text centred). Run only on screen; reduced motion shows the final frame.
+- Data section: the four stats count up from 0 when they enter the viewport (staggered, tabular figures, no layout shift; skipped for reduced motion).
