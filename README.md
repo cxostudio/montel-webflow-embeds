@@ -58,9 +58,9 @@ One bundle per page: `dist/montel-{analytics,risk,news}.min.{css,js}`. Each swap
 Part of the home bundle. The site-wide scripts in Webflow stay untouched; where one misbehaves on the homepage, `fixes.js` switches it off and replaces it.
 
 - Hero tabs: mint gradient hover on inactive tabs (desktop). Phone switcher: arrows disabled at the first/last tab, swipe on the panel, Figma styling.
-- Ecosystem (992px and up): the site's ScrollTrigger pins/fades are killed and replaced by a sticky stack. All three cards share one height (520 to 640px, from the viewport), every card stays at full opacity, "Market insights" is active on entry, the nav progress follows the scroll.
+- Ecosystem (992px and up): the site's ScrollTrigger pins/fades are killed and replaced by a sticky stack. All three cards share one height (520 to 640px, from the viewport), earlier cards shrink and fade (to 30%) as the next one covers them, "Market insights" is active on entry, the nav progress follows the scroll.
 - Ecosystem (phone): same height for the three cards, swipe between them.
-- Flags: rotate every 3s while in view, pause on hover, a click restarts from that flag. Slick's own autoplay never ran (7 flags, 7 visible).
+- Card 1: the slick flag column is replaced by a rail of 10 European markets (crisp SVG flags from flag-icons, MIT). It glides one flag every 3.6s while in view, pauses on hover, a click jumps to that flag; vertical on desktop, horizontal on tablet, hidden on phones like the original. The background image is replaced by a crisp Europe dot map (canvas, Natural Earth grid) that lights up the active country with a price pill. The chart, chips and sparklines morph to the active market.
 - Electric border: loops 90deg to 450deg so it never jumps.
 - Analysts: Figma layout on desktop (left-aligned text, tighter staggered grid, lilac glow).
 - Testimonials: arrow hover keeps the gradient at 90% opacity; 700ms crossfade; company tabs no longer slide.

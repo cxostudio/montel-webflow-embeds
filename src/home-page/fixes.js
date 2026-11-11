@@ -49,40 +49,6 @@
     }
   })();
 
-  /* ---------------- Ecosystem card 1: flags rotate every 3s ---------------- */
-  (function flags() {
-    var thumbs = document.querySelector('.eco2__country_thumb_slider');
-    if (!thumbs || !$ || !$.fn.slick) return;
-    var $t = $(thumbs), timer = null, hover = false, visible = false;
-    function count() { var s = $t.slick('getSlick'); return s ? s.slideCount : 0; }
-    function current() { return $t.slick('slickCurrentSlide'); }
-    function market() {
-      var slide = thumbs.querySelector('.slick-slide[data-slick-index="' + current() + '"]');
-      var img = slide && slide.querySelector('img');
-      return img ? (img.getAttribute('alt') || img.getAttribute('src') || '') : '';
-    }
-    function emit() {
-      var m = market();
-      try { document.dispatchEvent(new CustomEvent('mtl:market', { detail: { index: current(), market: m } })); } catch (e) {}
-      if (window.MontelEco && typeof window.MontelEco.setMarket === 'function') window.MontelEco.setMarket(m, current());
-    }
-    function tick() { if (visible && !hover && count() > 1) $t.slick('slickGoTo', (current() + 1) % count()); }
-    function start() { stop(); timer = setInterval(tick, 3000); }
-    function stop() { if (timer) clearInterval(timer); timer = null; }
-    function boot() {
-      if (!thumbs.classList.contains('slick-initialized')) return setTimeout(boot, 200);
-      try { $t.slick('slickSetOption', 'autoplay', false, false); $t.slick('slickPause'); } catch (e) {}
-      $t.on('afterChange', emit);
-      thumbs.addEventListener('mouseenter', function () { hover = true; });
-      thumbs.addEventListener('mouseleave', function () { hover = false; });
-      thumbs.addEventListener('click', function () { start(); }); /* a click picks the flag (slick's focusOnSelect), the rotation restarts from there */
-      var card = thumbs.closest('.eco2__body_item') || thumbs;
-      new IntersectionObserver(function (es) { visible = es[es.length - 1].isIntersecting; }, { threshold: .35 }).observe(card);
-      start(); emit();
-    }
-    onLoad(boot);
-  })();
-
   /* ---------------- Ecosystem (desktop): sticky stacked cards ---------------- */
   (function ecosystem() {
     var sec = document.querySelector('.eco2');
@@ -103,7 +69,7 @@
       gsap.set(items, { clearProps: 'transform,opacity,scale,translate,y' });
       gsap.set(navItems, { clearProps: 'opacity' });
       progress.forEach(function (p) { p.style.height = ''; });
-      items.forEach(function (it) { it.style.transform = ''; });
+      items.forEach(function (it) { it.style.transform = ''; it.style.opacity = ''; });
     }
 
     function desktop() {
@@ -139,6 +105,7 @@
           var depth = 0;
           for (var k = i + 1; k < n; k++) depth += clamp((y - (S[k] - D)) / D);
           el.style.transform = depth ? 'translate3d(0,' + (-18 * depth).toFixed(1) + 'px,0) scale(' + (1 - .05 * depth).toFixed(4) + ')' : '';
+          el.style.opacity = depth ? Math.max(.3, 1 - .6 * Math.min(1, depth)).toFixed(3) : '';
         });
       }
       function onScroll() { if (!raf) raf = requestAnimationFrame(render); }

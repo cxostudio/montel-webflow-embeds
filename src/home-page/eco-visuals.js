@@ -58,32 +58,38 @@
   function div(cls, parent, html, style) { var d = document.createElement('div'); d.className = cls; if (html != null) d.innerHTML = html; if (style) d.setAttribute('style', style); parent.appendChild(d); return d; }
 
   /* =========================================================
-     1) Market insights: exchange prices + carbon / gas / power
+     1) Market insights: exchange prices + carbon / gas / power,
+        Europe dot map behind, flag rail on the right
      ========================================================= */
   var MARKETS = [
-    { code: 'US', name: 'United States', base: 48, swing: 46, carbon: 68.95, gas: 31.28, power: 72.45, c: .8, g: 1.1, p: 2.3 },
-    { code: 'UK', name: 'United Kingdom', base: 74, swing: 52, carbon: 41.60, gas: 34.10, power: 86.20, c: -.6, g: 1.8, p: 3.1 },
-    { code: 'AU', name: 'Australia', base: 62, swing: 70, carbon: 34.20, gas: 12.85, power: 94.70, c: .4, g: -.9, p: 4.6 },
-    { code: 'AT', name: 'Austria', base: 82, swing: 58, carbon: 68.95, gas: 33.40, power: 91.35, c: .8, g: 1.4, p: -1.2 },
-    { code: 'BR', name: 'Brazil', base: 40, swing: 30, carbon: 22.10, gas: 41.75, power: 58.90, c: 1.6, g: .7, p: 1.9 },
-    { code: 'BE', name: 'Belgium', base: 79, swing: 61, carbon: 68.95, gas: 32.95, power: 88.10, c: .8, g: 1.2, p: 2.7 },
-    { code: 'CA', name: 'Canada', base: 44, swing: 38, carbon: 52.40, gas: 9.70, power: 61.25, c: .5, g: -1.4, p: 1.1 }
+    { code: 'DE', name: 'Germany',        base: 82, swing: 58, carbon: 68.95, gas: 34.20, power: 92.40, c: .8, g: 1.1, p: 2.3 },
+    { code: 'FR', name: 'France',         base: 66, swing: 50, carbon: 68.95, gas: 33.60, power: 78.10, c: .8, g: .9, p: -1.4 },
+    { code: 'GB', name: 'Great Britain',  base: 74, swing: 52, carbon: 41.60, gas: 34.10, power: 86.20, c: -.6, g: 1.8, p: 3.1 },
+    { code: 'NL', name: 'Netherlands',    base: 78, swing: 56, carbon: 68.95, gas: 33.15, power: 89.60, c: .8, g: 1.2, p: 1.7 },
+    { code: 'BE', name: 'Belgium',        base: 77, swing: 55, carbon: 68.95, gas: 32.95, power: 88.10, c: .8, g: 1.2, p: 2.7 },
+    { code: 'NO', name: 'Norway',         base: 36, swing: 22, carbon: 68.95, gas: 33.15, power: 41.30, c: .8, g: 1.2, p: -2.2 },
+    { code: 'SE', name: 'Sweden',         base: 31, swing: 26, carbon: 68.95, gas: 33.15, power: 36.80, c: .8, g: 1.2, p: 4.1 },
+    { code: 'ES', name: 'Spain',          base: 55, swing: 48, carbon: 68.95, gas: 34.40, power: 64.50, c: .8, g: .6, p: -3.0 },
+    { code: 'IT', name: 'Italy',          base: 98, swing: 44, carbon: 68.95, gas: 36.10, power: 108.90, c: .8, g: 1.5, p: 1.2 },
+    { code: 'AT', name: 'Austria',        base: 81, swing: 57, carbon: 68.95, gas: 35.20, power: 91.35, c: .8, g: 1.4, p: -1.2 }
   ];
   var ICONS = {
     carbon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-3.6 0-6-2.5-6-5.8 0-3.6 3.2-5.6 3.8-9.2 2.4 1.6 3.6 3.6 3.4 6 1-.6 1.6-1.6 1.8-2.8 1.8 1.6 3 3.6 3 6 0 3.3-2.4 5.8-6 5.8z"/></svg>',
     gas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14"/><path d="M5 19c3-4 6-7 10-9"/></svg>',
     power: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>'
   };
+  function ease(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function lerpPts(a, b, t) { return a.map(function (p, i) { return [p[0] + (b[i][0] - p[0]) * t, p[1] + (b[i][1] - p[1]) * t]; }); }
 
   function marketVisual(box) {
     var W = 1394, H = 896, m = Mount(box, W, H, 'mtl-ev--market', 1);
     var c = m.canvas;
     div('mtl-ev__glass', c, null, 'left:350px;top:52px;width:843px;height:843px');
     var dark = div('mtl-ev__dark', c, null, 'left:437px;top:179px;width:585px;height:585px');
-    var title = div('mtl-ev__dark-t', dark, 'Exchange prices · EUR/MWh');
+    div('mtl-ev__dark-t', dark, 'Exchange prices · EUR/MWh');
     var mk = div('mtl-ev__dark-m', dark, '');
     var svg = el('svg', { viewBox: '0 0 585 585', class: 'mtl-ev__plot' }); dark.appendChild(svg);
-    var X0 = 86, X1 = 545, Y0 = 130, Y1 = 487, MAXV = 160;
+    var X0 = 86, X1 = 545, Y0 = 150, Y1 = 487, MAXV = 175, N = 64;
     [0, 50, 100, 150].forEach(function (v) {
       var y = Y1 - (v / MAXV) * (Y1 - Y0);
       el('line', { x1: X0, x2: X1, y1: y, y2: y, class: 'mtl-ev__grid' }, svg);
@@ -98,59 +104,192 @@
 
     function chip(key, label, x, y, color) {
       var e = div('mtl-ev__chip', c, '<span class="mtl-ev__ic">' + ICONS[key] + '</span><span class="mtl-ev__chip-txt"><small>' + label + '</small><b class="v"></b><small class="u">' + (key === 'carbon' ? 'EUR/t' : 'EUR/MWh') + '</small></span><svg class="mtl-ev__spark" viewBox="0 0 200 60" preserveAspectRatio="none"><path class="f"/><path class="s"/></svg><span class="mtl-ev__pill"><span class="ar">&#8599;</span><span class="pc"></span></span>', 'left:' + x + 'px;top:' + y + 'px;width:600px;height:120px;--c:' + color);
-      return { el: e, v: e.querySelector('.v'), pc: e.querySelector('.pc'), ar: e.querySelector('.ar'), s: e.querySelector('.s'), f: e.querySelector('.f'), val: 0 };
+      return { el: e, v: e.querySelector('.v'), pc: e.querySelector('.pc'), ar: e.querySelector('.ar'), s: e.querySelector('.s'), f: e.querySelector('.f'), val: 0, pts: null };
     }
     var chips = { carbon: chip('carbon', 'Carbon', 726, 0, '#e07a1f'), gas: chip('gas', 'Gas', 0, 430, '#a14be8'), power: chip('power', 'Power', 794, 672, '#0d6d5c') };
 
-    var series = [], idx = 0, raf = 0, cur = 0;
-    function build(mi) {
-      var M = MARKETS[mi], r = rnd(mi * 97 + 13), n = 64; series = [];
-      for (var i = 0; i < n; i++) {
-        var t = i / (n - 1), day = Math.sin(t * Math.PI * 3 - .6);
+    /* data per market */
+    function seriesFor(mi) {
+      var M = MARKETS[mi], r = rnd(mi * 97 + 13), out = [];
+      for (var i = 0; i < N; i++) {
+        var t = i / (N - 1), day = Math.sin(t * Math.PI * 3 - .6);
         var spike = Math.exp(-Math.pow((t - .32) * 9, 2)) * 1.25 + Math.exp(-Math.pow((t - .55) * 14, 2)) * .55 - Math.exp(-Math.pow((t - .62) * 12, 2)) * .5;
-        var v = M.base + M.swing * (.25 * day + spike) + (r() - .5) * 6;
-        series.push(Math.max(8, Math.min(MAXV - 6, v)));
+        out.push(Math.max(8, Math.min(150, M.base + M.swing * (.25 * day + spike) + (r() - .5) * 6)));
       }
-      function pts(off) { return series.map(function (v, i) { return [X0 + (i / (n - 1)) * (X1 - X0), Y1 - ((v + off(i)) / MAXV) * (Y1 - Y0)]; }); }
-      var spread = function (k) { return function (i) { return k * (2.5 + Math.abs(series[i] - M.base) * .12); }; };
-      var pAsk = pts(spread(1)), pLast = pts(function () { return 0; }), pBid = pts(spread(-1));
-      lines.ask.setAttribute('d', smooth(pAsk)); lines.last.setAttribute('d', smooth(pLast)); lines.bid.setAttribute('d', smooth(pBid));
-      area.setAttribute('d', smooth(pLast) + ' L' + X1 + ' ' + Y1 + ' L' + X0 + ' ' + Y1 + 'Z');
-      draw(lines.bid, 1300, 0); draw(lines.last, 1300, 120); draw(lines.ask, 1300, 240);
-      mk.textContent = M.name;
-      ['carbon', 'gas', 'power'].forEach(function (k, j) {
-        var ch = chips[k], to = M[k], pct = M[k === 'carbon' ? 'c' : k === 'gas' ? 'g' : 'p'];
-        tween(ch.val, to, 900, function (v) { ch.v.textContent = fmt(v); }); ch.val = to;
-        ch.pc.textContent = (Math.abs(pct)).toFixed(1).replace('.', ',') + ' %';
-        ch.ar.innerHTML = pct >= 0 ? '&#8599;' : '&#8600;';
-        var rr = rnd(mi * 31 + j * 7 + 1), y = 30, sp = [];
-        for (var i = 0; i < 18; i++) { y += (rr() - .45 - (pct < 0 ? .1 : 0)) * 14; y = Math.max(8, Math.min(52, y)); sp.push([i * (200 / 17), 60 - y]); }
-        var d = smooth(sp); ch.s.setAttribute('d', d); ch.f.setAttribute('d', d + ' L200 60 L0 60Z'); draw(ch.s, 1100, 200 + j * 120);
-      });
+      return out;
     }
-    function valAt(p) { var f = p * (series.length - 1), i = Math.floor(f), t = f - i; var a = series[i], b = series[Math.min(series.length - 1, i + 1)]; return a + (b - a) * t; }
+    function linePts(ser, k, base) { return ser.map(function (v, i) { var off = k * (2.5 + Math.abs(v - base) * .12); return [X0 + (i / (N - 1)) * (X1 - X0), Y1 - ((v + off) / MAXV) * (Y1 - Y0)]; }); }
+    function sparkPts(mi, j, pct) { var rr = rnd(mi * 31 + j * 7 + 1), y = 30, sp = []; for (var i = 0; i < 18; i++) { y += (rr() - .45 - (pct < 0 ? .1 : 0)) * 14; y = Math.max(8, Math.min(52, y)); sp.push([i * (200 / 17), 60 - y]); } return sp; }
+
+    var idx = 0, cur = { ask: null, last: null, bid: null, ser: null, base: 0 }, morphRaf = 0;
+    function paint(st) {
+      lines.ask.setAttribute('d', smooth(st.ask)); lines.last.setAttribute('d', smooth(st.last)); lines.bid.setAttribute('d', smooth(st.bid));
+      area.setAttribute('d', smooth(st.last) + ' L' + X1 + ' ' + Y1 + ' L' + X0 + ' ' + Y1 + 'Z');
+    }
+    function target(mi) { var ser = seriesFor(mi), b = MARKETS[mi].base; return { ser: ser, base: b, ask: linePts(ser, 1, b), last: linePts(ser, 0, b), bid: linePts(ser, -1, b) }; }
+    function morphTo(mi, first) {
+      var M = MARKETS[mi], to = target(mi);
+      mk.classList.add('is-out');
+      setTimeout(function () { mk.textContent = M.name; mk.classList.remove('is-out'); }, first ? 0 : 280);
+      ['carbon', 'gas', 'power'].forEach(function (k, j) {
+        var ch = chips[k], v = M[k], pct = M[k === 'carbon' ? 'c' : k === 'gas' ? 'g' : 'p'], sp = sparkPts(mi, j, pct);
+        tween(ch.val, v, first ? 0 : 1000, function (x) { ch.v.textContent = fmt(x); }); ch.val = v;
+        ch.pc.textContent = Math.abs(pct).toFixed(1).replace('.', ',') + ' %'; ch.ar.innerHTML = pct >= 0 ? '&#8599;' : '&#8600;';
+        ch.from = ch.pts || sp; ch.to = sp; ch.pts = sp;
+        if (first) { var d = smooth(sp); ch.s.setAttribute('d', d); ch.f.setAttribute('d', d + ' L200 60 L0 60Z'); draw(ch.s, 1100, 200 + j * 120); }
+      });
+      if (first || reduce) {
+        cur = to; paint(cur);
+        if (first) { draw(lines.bid, 1300, 0); draw(lines.last, 1300, 120); draw(lines.ask, 1300, 240); }
+        if (reduce) ['carbon', 'gas', 'power'].forEach(function (k) { var d = smooth(chips[k].to); chips[k].s.setAttribute('d', d); chips[k].f.setAttribute('d', d + ' L200 60 L0 60Z'); });
+        return;
+      }
+      var from = { ask: cur.ask, last: cur.last, bid: cur.bid, ser: cur.ser }, t0 = performance.now(), D = 1100;
+      cancelAnimationFrame(morphRaf);
+      (function f(t) {
+        var p = ease(Math.min(1, (t - t0) / D));
+        cur = { base: to.base, ser: from.ser.map(function (v, i) { return v + (to.ser[i] - v) * p; }), ask: lerpPts(from.ask, to.ask, p), last: lerpPts(from.last, to.last, p), bid: lerpPts(from.bid, to.bid, p) };
+        paint(cur);
+        ['carbon', 'gas', 'power'].forEach(function (k) { var ch = chips[k], d = smooth(lerpPts(ch.from, ch.to, p)); ch.s.style.strokeDasharray = 'none'; ch.s.setAttribute('d', d); ch.f.setAttribute('d', d + ' L200 60 L0 60Z'); });
+        if (p < 1) morphRaf = requestAnimationFrame(f);
+      })(t0);
+    }
+    function valAt(p) { var s = cur.ser, f = p * (s.length - 1), i = Math.floor(f), t = f - i; var a = s[i], b = s[Math.min(s.length - 1, i + 1)]; return a + (b - a) * t; }
     function place(p) {
       var x = X0 + p * (X1 - X0), v = valAt(p), y = Y1 - (v / MAXV) * (Y1 - Y0);
       cursor.setAttribute('x1', x); cursor.setAttribute('x2', x); dot.setAttribute('cx', x); dot.setAttribute('cy', y);
-      var M = MARKETS[idx], sp = 2.5 + Math.abs(v - M.base) * .12;
+      var sp = 2.5 + Math.abs(v - cur.base) * .12;
       var mins = Math.round(p * 2 * 24 * 60 / 30) * 30, day = 7 + Math.floor(mins / 1440), hm = mins % 1440;
-      var hh = ('0' + Math.floor(hm / 60)).slice(-2), mm = ('0' + hm % 60).slice(-2);
-      tip.querySelector('.mtl-ev__tip-t').textContent = (day === 7 ? 'Tue' : 'Wed') + ' ' + day + ' May ' + hh + ':' + mm;
+      tip.querySelector('.mtl-ev__tip-t').textContent = (day === 7 ? 'Tue' : 'Wed') + ' ' + day + ' May ' + ('0' + Math.floor(hm / 60)).slice(-2) + ':' + ('0' + hm % 60).slice(-2);
       tip.querySelector('.va').textContent = fmt(v + sp); tip.querySelector('.vl').textContent = fmt(v); tip.querySelector('.vb').textContent = fmt(v - sp);
       var tx = 437 + x + 30, ty = 179 + y - 90; if (tx > 1080) tx = 437 + x - 330;
       tip.style.transform = 'translate(' + tx.toFixed(1) + 'px,' + Math.max(190, Math.min(560, ty)).toFixed(1) + 'px)';
     }
-    function loop(t) { cur = (t / 14000) % 1; place(.08 + cur * .86); raf = requestAnimationFrame(loop); }
+    var raf = 0;
+    function loop(t) { place(.08 + ((t / 16000) % 1) * .86); raf = requestAnimationFrame(loop); }
     m.onShow = function () { if (!reduce && !raf) raf = requestAnimationFrame(loop); };
     m.onHide = function () { cancelAnimationFrame(raf); raf = 0; };
-    build(0); place(.62);
+    morphTo(0, true); place(.62);
     return {
       setMarket: function (key) {
         var i = typeof key === 'number' ? key : -1;
         if (i < 0) { var k = String(key || '').toUpperCase(); MARKETS.forEach(function (M, j) { if (M.code === k || M.name.toUpperCase() === k) i = j; }); }
-        if (i < 0 || i >= MARKETS.length || i === idx) return; idx = i; build(i); if (reduce) place(.62);
+        if (i < 0 || i >= MARKETS.length || i === idx) return; idx = i; morphTo(i, false); if (reduce) place(.62);
       }
     };
+  }
+
+  /* ---------- Europe dot map behind card 1 (canvas, crisp at any pixel ratio) ---------- */
+  function europeMap(card, getAnchor) {
+    var D = window.MontelMapData; if (!D) return null;
+    var cv = document.createElement('canvas'); cv.className = 'mtl-ev-map'; cv.setAttribute('aria-hidden', 'true');
+    card.insertBefore(cv, card.firstChild);
+    var ctx = cv.getContext('2d'), S = D.s, rows = D.rows.split('|'), dots = [];
+    for (var r = 0; r < rows.length; r++) {
+      if (!rows[r]) continue;
+      rows[r].split(';').forEach(function (run) {
+        var q = run.split(','), c0 = +q[0], len = +q[1], ci = +q[2], w = +q[3] / 9;
+        for (var k = 0; k < len; k++) dots.push([(c0 + k) * S + (r % 2 ? S / 2 : 0), r * S * .866, ci, w]);
+      });
+    }
+    var codeIdx = {}; D.countries.forEach(function (cn, i) { codeIdx[cn.code] = i; });
+    var base = document.createElement('canvas'), bctx = base.getContext('2d');
+    var dpr = 1, k = 1, ox = 0, oy = 0, cw = 0, ch = 0, active = -1, prev = -1, mix = 1, t0 = 0, raf = 0, visible = false;
+    var label = document.createElement('div'); label.className = 'mtl-ev-map__label'; card.appendChild(label);
+    function layout() {
+      cw = card.clientWidth; ch = card.clientHeight; if (!cw || !ch) return;
+      dpr = Math.min(2.5, window.devicePixelRatio || 1);
+      cv.width = base.width = Math.round(cw * dpr); cv.height = base.height = Math.round(ch * dpr);
+      cv.style.width = cw + 'px'; cv.style.height = ch + 'px';
+      k = (ch * 1.12) / D.h;
+      var A = getAnchor ? getAnchor() : { x: cw * .62, y: ch * .55 }, de = D.countries[codeIdx.DE];
+      ox = A.x - de.x * k; oy = A.y - de.y * k;
+      bctx.setTransform(dpr, 0, 0, dpr, 0, 0); bctx.clearRect(0, 0, cw, ch);
+      var rad = Math.max(.9, S * k * .27);
+      dots.forEach(function (d) {
+        var x = ox + d[0] * k, y = oy + d[1] * k; if (x < -4 || y < -4 || x > cw + 4 || y > ch + 4) return;
+        var cn = D.countries[d[2]], a = (cn && cn.faded ? .08 : .2) * (.35 + .65 * d[3]);
+        bctx.fillStyle = 'rgba(132,214,203,' + a.toFixed(3) + ')'; bctx.beginPath(); bctx.arc(x, y, rad, 0, 6.2832); bctx.fill();
+      });
+      frame(performance.now());
+    }
+    function countryDots(ci, alpha, rad) {
+      ctx.fillStyle = 'rgba(150,240,226,' + alpha.toFixed(3) + ')';
+      dots.forEach(function (d) { if (d[2] !== ci) return; var x = ox + d[0] * k, y = oy + d[1] * k; ctx.beginPath(); ctx.arc(x, y, rad, 0, 6.2832); ctx.fill(); });
+    }
+    function frame(t) {
+      raf = 0; if (!cw) return;
+      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.drawImage(base, 0, 0);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var rad = Math.max(.9, S * k * .27);
+      mix = reduce ? 1 : Math.min(1, (t - t0) / 900);
+      if (prev >= 0 && mix < 1) countryDots(prev, .55 * (1 - mix), rad);
+      if (active >= 0) {
+        countryDots(active, .55 * mix, rad);
+        var cn = D.countries[active], x = ox + cn.x * k, y = oy + cn.y * k, ph = reduce ? 0 : ((t / 1800) % 1);
+        ctx.strokeStyle = 'rgba(48,222,238,' + (.55 * (1 - ph) * mix).toFixed(3) + ')'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(x, y, 6 + ph * 22, 0, 6.2832); ctx.stroke();
+        ctx.fillStyle = 'rgba(48,222,238,' + mix.toFixed(3) + ')'; ctx.beginPath(); ctx.arc(x, y, 4.5, 0, 6.2832); ctx.fill();
+        label.style.transform = 'translate(' + (x + 16).toFixed(1) + 'px,' + (y - 15).toFixed(1) + 'px)';
+      }
+      if (visible && !reduce) raf = requestAnimationFrame(frame);
+    }
+    new ResizeObserver(function () { layout(); }).observe(card);
+    new IntersectionObserver(function (es) { visible = es[es.length - 1].isIntersecting; if (visible && !raf) raf = requestAnimationFrame(frame); }, { threshold: .05 }).observe(card);
+    return {
+      setActive: function (code, name, price) {
+        var ci = codeIdx[code]; if (ci == null) return;
+        prev = active; active = ci; t0 = performance.now();
+        label.classList.remove('is-in'); label.getBoundingClientRect();
+        label.innerHTML = '<b>' + name + '</b><span>' + price.toFixed(2) + ' EUR/MWh</span>'; label.classList.add('is-in');
+        if (!raf) raf = requestAnimationFrame(frame);
+      },
+      relayout: layout
+    };
+  }
+
+  /* ---------- flag rail: slow continuous rotation (replaces the slick column) ---------- */
+  function flagRail(slider, onChange) {
+    var F = window.MontelFlags || {}, n = MARKETS.length, COPIES = 3;
+    var rail = document.createElement('div'); rail.className = 'mtl-flags';
+    var track = document.createElement('div'); track.className = 'mtl-flags__track'; rail.appendChild(track);
+    var items = [];
+    for (var c = 0; c < COPIES; c++) MARKETS.forEach(function (M, i) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'mtl-flags__item';
+      b.setAttribute('aria-label', M.name); b.innerHTML = '<span class="mtl-flags__flag">' + (F[M.code] || M.code) + '</span>';
+      var j = items.length;
+      b.addEventListener('click', function () { if (j !== pos) go(j, true); restart(); });
+      track.appendChild(b); items.push(b);
+    });
+    slider.parentNode.insertBefore(rail, slider.nextSibling);
+    slider.classList.add('mtl-hidden');
+    var horizontal = false, slot = 74, pos = n, timer = 0, hover = false, visible = false;
+    function measure() {
+      horizontal = rail.clientWidth > rail.clientHeight * 1.4;
+      rail.classList.toggle('is-h', horizontal);
+      var it = items[0]; if (!it) return;
+      var cs = getComputedStyle(it);
+      slot = (horizontal ? it.offsetWidth + parseFloat(cs.marginLeft) + parseFloat(cs.marginRight) : it.offsetHeight + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom)) || 74;
+      apply(false);
+    }
+    function apply(anim) {
+      var view = horizontal ? rail.clientWidth : rail.clientHeight, off = view / 2 - (pos + .5) * slot;
+      track.style.transition = anim && !reduce ? 'transform 1.1s cubic-bezier(.65,0,.35,1)' : 'none';
+      track.style.transform = horizontal ? 'translate3d(' + off.toFixed(1) + 'px,0,0)' : 'translate3d(0,' + off.toFixed(1) + 'px,0)';
+      items.forEach(function (b, j) { b.classList.toggle('is-active', j === pos); });
+    }
+    function go(p, anim) {
+      pos = p; apply(anim); onChange(pos % n);
+      if (pos >= n * 2 || pos < n) setTimeout(function () { pos = n + (pos % n); apply(false); }, reduce ? 0 : 1150);
+    }
+    function tick() { if (visible && !hover) go(pos + 1, true); }
+    function restart() { clearInterval(timer); timer = setInterval(tick, 3600); }
+    rail.addEventListener('mouseenter', function () { hover = true; });
+    rail.addEventListener('mouseleave', function () { hover = false; });
+    new IntersectionObserver(function (es) { visible = es[es.length - 1].isIntersecting; }, { threshold: .35 }).observe(rail);
+    new ResizeObserver(function () { measure(); }).observe(rail);
+    measure(); onChange(pos % n); if (!reduce) restart();
+    return rail;
   }
 
   /* =========================================================
@@ -245,16 +384,37 @@
   function boot() {
     var api = {};
     var center = document.querySelector('.eco_country__center');
+    var card = document.querySelector('.eco2__country');
     if (center && !center.querySelector('.mtl-ev')) {
       center.classList.add('has-mtl-ev');
       api.market = marketVisual(center);
     }
+    if (card && !card.querySelector('.mtl-ev-map')) {
+      card.classList.add('has-mtl-map');
+      api.map = europeMap(card, function () {
+        var cr = card.getBoundingClientRect(), r = center ? center.getBoundingClientRect() : null;
+        if (!r || !r.width) return { x: cr.width * .55, y: cr.height * .58 };
+        return { x: r.left - cr.left + r.width * .38, y: cr.height * .6 };
+      });
+    }
+    function setMarket(i) {
+      var M = MARKETS[i]; if (!M) return;
+      if (api.market) api.market.setMarket(i);
+      if (api.map) api.map.setActive(M.code, M.name, M.power);
+      try { document.dispatchEvent(new CustomEvent('mtl:market', { detail: { index: i, market: M.code } })); } catch (e) {}
+    }
+    var thumbs = document.querySelector('.eco2__country_thumb_slider');
+    if (thumbs && !document.querySelector('.mtl-flags')) flagRail(thumbs, setMarket); else setMarket(0);
     var media = document.querySelector('.ecosystem__card2_media');
     if (media && !media.querySelector('.mtl-ev')) { media.classList.add('has-mtl-ev'); imbalanceVisual(media); }
     var strat = document.querySelector('.ecosystem__strategy_media');
     if (strat && !strat.querySelector('.mtl-ev')) { strat.classList.add('has-mtl-ev'); scenarioVisual(strat); }
     window.MontelEco = window.MontelEco || {};
-    window.MontelEco.setMarket = function (key, index) { if (api.market) api.market.setMarket(typeof index === 'number' ? index : key); };
+    window.MontelEco.setMarket = function (key) {
+      var i = typeof key === 'number' ? key : -1, k = String(key || '').toUpperCase();
+      if (i < 0) MARKETS.forEach(function (M, j) { if (M.code === k) i = j; });
+      if (i >= 0) setMarket(i);
+    };
     window.MontelEco.markets = MARKETS.map(function (M) { return M.code; });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();

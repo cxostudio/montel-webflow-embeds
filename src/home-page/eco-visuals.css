@@ -91,3 +91,54 @@
 @media (prefers-reduced-motion: reduce) {
   .mtl-ev__chip, .mtl-ev__scn.is-on .mtl-ev__ring { animation: none; }
 }
+
+/* ---------- card 1: crisp Europe dot map instead of the background image ---------- */
+.eco2__country.has-mtl-map {
+  position: relative; overflow: hidden;
+  background-image: radial-gradient(70% 90% at 62% 55%, #0a4a4c 0%, rgba(10, 74, 76, 0) 70%), linear-gradient(135deg, #032628 0%, #053638 55%, #07403f 100%) !important;
+}
+.eco2__country.has-mtl-map > *:not(.mtl-ev-map):not(.mtl-ev-map__label) { position: relative; z-index: 1; }
+.mtl-ev-map {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  -webkit-mask-image: radial-gradient(75% 85% at 60% 55%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(75% 85% at 60% 55%, #000 55%, transparent 100%);
+}
+.mtl-ev-map__label {
+  position: absolute; left: 0; top: 0; z-index: 2; pointer-events: none; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 5px 6px; border-radius: 999px;
+  background: rgba(255, 255, 255, .94); color: #0c2a2b; font-size: 12px; line-height: 18px;
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, .55); opacity: 0; transition: opacity .6s ease .35s;
+}
+.mtl-ev-map__label b { font-weight: 600; padding: 1px 8px; border-radius: 999px; background: #e1f5ed; color: #0d6d5c; }
+.mtl-ev-map__label.is-in { opacity: 1; }
+.mtl-ev__dark-m { transition: opacity .28s ease; }
+.mtl-ev__dark-m.is-out { opacity: 0; }
+
+/* ---------- card 1: flag rail ---------- */
+.mtl-hidden { display: none !important; }
+.mtl-flags {
+  position: relative; overflow: hidden; align-self: stretch; width: 64px; flex: 0 0 64px; min-height: 300px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14%, #000 86%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 14%, #000 86%, transparent 100%);
+}
+.mtl-flags__track { position: absolute; left: 0; top: 0; width: 100%; will-change: transform; }
+.mtl-flags__item {
+  display: grid; place-items: center; width: 64px; height: 64px; margin: 0 0 10px; padding: 0; border: 0; cursor: pointer;
+  border-radius: 16px; background: rgba(255, 255, 255, .08); transition: background-color .9s ease, box-shadow .9s ease;
+}
+.mtl-flags__flag { display: block; width: 36px; height: 27px; border-radius: 4px; overflow: hidden; opacity: .55; transform: scale(.94); transition: opacity .9s ease, transform .9s ease; box-shadow: 0 0 0 1px rgba(255, 255, 255, .12); }
+.mtl-flags__flag svg { display: block; width: 100%; height: 100%; }
+.mtl-flags__item:hover .mtl-flags__flag { opacity: .85; }
+.mtl-flags__item.is-active { background: linear-gradient(223deg, rgba(212, 208, 255, .85), rgba(210, 253, 247, .85)); box-shadow: 0 12px 24px -14px rgba(0, 0, 0, .5); }
+.mtl-flags__item.is-active .mtl-flags__flag { opacity: 1; transform: scale(1.06); box-shadow: none; }
+.mtl-flags.is-h { width: auto; flex: 1 1 auto; min-height: 0; height: 74px;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 12%, #000 88%, transparent 100%); }
+.mtl-flags.is-h .mtl-flags__track { display: flex; width: max-content; height: 100%; align-items: center; }
+.mtl-flags.is-h .mtl-flags__item { margin: 0 10px 0 0; flex: 0 0 64px; }
+@media (max-width: 991px) {
+  .mtl-flags { width: 100%; flex: 1 1 auto; height: 74px; min-height: 0; align-self: auto; }
+}
+@media (max-width: 767px) {
+  .mtl-flags, .mtl-ev-map__label { display: none !important; }
+}
