@@ -133,15 +133,27 @@
       setTimeout(function () { mk.textContent = M.name; mk.classList.remove('is-out'); }, first ? 0 : 280);
       ['carbon', 'gas', 'power'].forEach(function (k, j) {
         var ch = chips[k], v = M[k], pct = M[k === 'carbon' ? 'c' : k === 'gas' ? 'g' : 'p'], sp = sparkPts(mi, j, pct);
-        tween(ch.val, v, first ? 0 : 1000, function (x) { ch.v.textContent = fmt(x); }); ch.val = v;
-        ch.pc.textContent = Math.abs(pct).toFixed(1).replace('.', ',') + ' %'; ch.ar.innerHTML = pct >= 0 ? '&#8599;' : '&#8600;';
-        ch.from = ch.pts || sp; ch.to = sp; ch.pts = sp;
-        if (first) { var d = smooth(sp); ch.s.setAttribute('d', d); ch.f.setAttribute('d', d + ' L200 60 L0 60Z'); draw(ch.s, 1100, 200 + j * 120); }
+        function fill() {
+          ch.v.textContent = fmt(v); ch.val = v; ch.pts = sp;
+          ch.pc.textContent = Math.abs(pct).toFixed(1).replace('.', ',') + ' %'; ch.ar.innerHTML = pct >= 0 ? '&#8599;' : '&#8600;';
+          var d = smooth(sp); ch.s.setAttribute('d', d); ch.f.setAttribute('d', d + ' L200 60 L0 60Z');
+        }
+        if (first || reduce) { fill(); if (first) draw(ch.s, 1100, 200 + j * 120); return; }
+        /* fly into the centre of the chart, swap the data, fly back out */
+        var e = ch.el, cx = parseFloat(e.style.left) + 300, cy = parseFloat(e.style.top) + 60;
+        var dx = (729 - cx) * .82, dy = (471 - cy) * .82, delay = j * 70;
+        e.style.transition = 'translate .45s cubic-bezier(.55,0,.75,.2) ' + delay + 'ms, scale .45s cubic-bezier(.55,0,.75,.2) ' + delay + 'ms, opacity .35s ease ' + (delay + 100) + 'ms';
+        e.style.translate = dx.toFixed(0) + 'px ' + dy.toFixed(0) + 'px'; e.style.scale = '.45'; e.style.opacity = '0';
+        setTimeout(function () {
+          fill();
+          e.style.transition = 'translate .75s cubic-bezier(.2,.8,.2,1), scale .75s cubic-bezier(.2,.8,.2,1), opacity .4s ease';
+          e.style.translate = '0px 0px'; e.style.scale = '1'; e.style.opacity = '1';
+          draw(ch.s, 900, 250);
+        }, 520 + delay);
       });
       if (first || reduce) {
         cur = to; paint(cur);
         if (first) { draw(lines.bid, 1300, 0); draw(lines.last, 1300, 120); draw(lines.ask, 1300, 240); }
-        if (reduce) ['carbon', 'gas', 'power'].forEach(function (k) { var d = smooth(chips[k].to); chips[k].s.setAttribute('d', d); chips[k].f.setAttribute('d', d + ' L200 60 L0 60Z'); });
         return;
       }
       var from = { ask: cur.ask, last: cur.last, bid: cur.bid, ser: cur.ser }, t0 = performance.now(), D = 1100;
@@ -150,7 +162,6 @@
         var p = ease(Math.min(1, (t - t0) / D));
         cur = { base: to.base, ser: from.ser.map(function (v, i) { return v + (to.ser[i] - v) * p; }), ask: lerpPts(from.ask, to.ask, p), last: lerpPts(from.last, to.last, p), bid: lerpPts(from.bid, to.bid, p) };
         paint(cur);
-        ['carbon', 'gas', 'power'].forEach(function (k) { var ch = chips[k], d = smooth(lerpPts(ch.from, ch.to, p)); ch.s.style.strokeDasharray = 'none'; ch.s.setAttribute('d', d); ch.f.setAttribute('d', d + ' L200 60 L0 60Z'); });
         if (p < 1) morphRaf = requestAnimationFrame(f);
       })(t0);
     }
@@ -195,7 +206,6 @@
     var codeIdx = {}; D.countries.forEach(function (cn, i) { codeIdx[cn.code] = i; });
     var base = document.createElement('canvas'), bctx = base.getContext('2d');
     var dpr = 1, k = 1, ox = 0, oy = 0, cw = 0, ch = 0, active = -1, prev = -1, mix = 1, t0 = 0, raf = 0, visible = false;
-    var label = document.createElement('div'); label.className = 'mtl-ev-map__label'; card.appendChild(label);
     function layout() {
       cw = card.clientWidth; ch = card.clientHeight; if (!cw || !ch) return;
       dpr = Math.min(2.5, window.devicePixelRatio || 1);
@@ -230,7 +240,6 @@
         ctx.strokeStyle = 'rgba(48,222,238,' + (.55 * (1 - ph) * mix).toFixed(3) + ')'; ctx.lineWidth = 1.5;
         ctx.beginPath(); ctx.arc(x, y, 6 + ph * 22, 0, 6.2832); ctx.stroke();
         ctx.fillStyle = 'rgba(48,222,238,' + mix.toFixed(3) + ')'; ctx.beginPath(); ctx.arc(x, y, 4.5, 0, 6.2832); ctx.fill();
-        label.style.transform = 'translate(' + (x + 16).toFixed(1) + 'px,' + (y - 15).toFixed(1) + 'px)';
       }
       if (visible && !reduce) raf = requestAnimationFrame(frame);
     }
@@ -240,8 +249,6 @@
       setActive: function (code, name, price) {
         var ci = codeIdx[code]; if (ci == null) return;
         prev = active; active = ci; t0 = performance.now();
-        label.classList.remove('is-in'); label.getBoundingClientRect();
-        label.innerHTML = '<b>' + name + '</b><span>' + price.toFixed(2) + ' EUR/MWh</span>'; label.classList.add('is-in');
         if (!raf) raf = requestAnimationFrame(frame);
       },
       relayout: layout
