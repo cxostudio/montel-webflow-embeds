@@ -39,3 +39,8 @@
 .explore_country__info [data-mtl-cov-item]:is(:not([data-fund]),[data-fund=""]) .explore_country__info_list > [data-mtl-cov-row=carbon] > .explore_country__info_item > .explore_country__info_item_inner,
 .explore_country__info [data-mtl-cov-item]:is(:not([data-fund]),[data-fund=""]):is(:not([data-carbon]),[data-carbon=""]) .explore_country__info_list > [data-mtl-cov-row=gas] > .explore_country__info_item > .explore_country__info_item_inner,
 .explore_country__info [data-mtl-cov-item]:is(:not([data-fund]),[data-fund=""]):is(:not([data-carbon]),[data-carbon=""]):is(:not([data-gas]),[data-gas=""]) .explore_country__info_list > [data-mtl-cov-row=power] > .explore_country__info_item > .explore_country__info_item_inner { border: 0; padding: 0; }
+
+/* "Where you work": catalogue animation instead of the image (this page only) */
+.analytics_work__right .analytics_work__img { visibility: hidden; }
+.analytics_work__right.has-mtl-cat > .analytics_work__img { display: none; }
+.mtl-cat-mount { width: 100%; }

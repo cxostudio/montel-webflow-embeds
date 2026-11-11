@@ -8,7 +8,7 @@ Served to Webflow through jsDelivr, pinned to a git tag so every release is immu
 | File | What it does |
 |---|---|
 | `dist/montel-data.min.css` | Hero map, coverage map, Data page layout glue |
-| `dist/montel-data.min.js` | Swaps the hero image for the live hero map, then runs the hero map and the "Explore by country" coverage map |
+| `dist/montel-data.min.js` | On /data only: swaps the hero image for the live hero map and the "Where you work" image for the catalogue animation, and runs the "Explore by country" coverage map |
 
 Loaded on the Data page only (page settings, set through the Webflow API):
 
@@ -31,7 +31,7 @@ Content changes happen in the CMS only. Code changes: edit `src/`, run `build/bu
 
 ```
 src/shared/     montel-map-data.js (Europe dot grid, Natural Earth), montel-map-borders.js (outlines, same projection)
-src/data-page/  mount.js, montel-map.{js,css} (hero), montel-coverage-map.{js,css}, page.css
+src/data-page/  mount.js, montel-map.{js,css} (hero), montel-coverage-map.{js,css}, montel-catalogue.{js,css}, page.css
 build/          build.sh (esbuild), build-map.js / build-borders.js (regenerate the geo data)
 dist/           minified bundles served by jsDelivr
 ```
