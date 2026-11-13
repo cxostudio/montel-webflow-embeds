@@ -1,0 +1,11 @@
+{"note":"Values BEFORE the airy-layout pass (13 Nov). Restore with data_style_tool update_style, breakpoint main unless noted.",
+"text_size_64":{"font-size":"64px","line-height":"100%","medium":"40px kept"},
+"text_size_100":{"font-size":"100px"},"text_size_72":{"font-size":"72px"},"text_size_48":{"font-size":"48px"},
+"text_size_44":{"font-size":"44px","medium":"34px"},"text_size_42":{"font-size":"42px"},
+"text_size_36":{"font-size":"36px","medium":"28px"},"text_size_34":{"font-size":"34px","medium":"30px"},
+"text_size_26":{"font-size":"26px"},"text_size_24":{"font-size":"24px","medium":"20px"},
+"text_size_22":{"font-size":"22px"},"text_size_20":{"font-size":"20px"},
+"container":{"width":"calc(100% - 50px)","max-width":"1600px","medium":"no override existed (remove added one)"},
+"hero__tab":{"max-width":"1160px"},
+"page_hero":{"overflow-x":"unset (added clip)"},"our_stories":{"overflow-x":"unset (added clip)"},
+"section-pad variable":"120px base / 80 tablet / 60 mobile (unchanged)"}

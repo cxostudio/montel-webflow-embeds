@@ -1,0 +1,6 @@
+{
+ "page": "6a82c82667c5b49842ccd341 (Home)",
+ "note": "Both are component instances inside <main>. Order: ... events, CTA, Coverage, Newsletter. Restore = insert instance of the component after the events section with these props.",
+ "cta": {"element": "c63b5705-d70f-818b-7aef-c1f040ee0e23", "component": "CTA", "componentInstanceId": "c63b5705-d70f-818b-7aef-c1f040ee0e24", "props": {"Padding block": "base", "Badge": "Why Montel (override)"}, "after": "section.events 9c855af8-b442-9f93-7d11-0d399d94834a"},
+ "coverage": {"element": "1302c766-be91-6ede-7fcd-61416199a0fb", "component": "Coverage", "componentDefinitionId": "e649f8fd-76de-8339-e186-cf7ef7ef10a7", "props": {"Variant": "base", "Badge": "default", "Heading": "default", "Description": "default"}, "after": "CTA instance", "before": "Newsletter 77a55ca5-a60e-e803-1cb5-e15e8d60a5c2"}
+}
