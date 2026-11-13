@@ -5,6 +5,10 @@
 .hero__tab_body:has(.has-mtl-slides) { border: 0; box-shadow: none; background: none; border-radius: 0; overflow: visible; }
 .hero__tab_content.has-mtl-slides { overflow: visible; }
 .hero__tab_content.has-mtl-slides > img { display: none !important; }
+/* first paint: keep the static tab images' space but don't show them (the slides replace them).
+   If the script never runs, they reveal after 3s. */
+.hero__tab_content > img { visibility: hidden; animation: mtlImgReveal 0s 3s forwards; }
+@keyframes mtlImgReveal { to { visibility: visible; } }
 .mtl-tab-slide { width: 100%; }
 /* phones: only the main card(s), no hard crop edges */
 @media (max-width: 640px) {

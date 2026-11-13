@@ -1,0 +1,138 @@
+<script>/* Swiper CSS only where the brief history slider lives; the footer loads it elsewhere if the slider is ever added */if(/^\/(about-us|why-montel)\/?$/.test(location.pathname))document.write('<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@14.0.1/swiper-bundle.min.css" />')</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+  .hero__tab_content > * {
+    width: 100%;
+    height: auto;
+    display: none;
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  
+  .hero__tab_content > *:first-child {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .hero__tab_content > *.active {
+    display: block;
+    animation: artUp 0.7s ease forwards;
+  }
+  
+  @keyframes artUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+<style>
+  .ecosystem__animation {
+    height: 100vh;
+  }
+  .ecosystem__gallery_slider .swiper-slide {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .ecosystem__gallery_slider .swiper-slide-prev,
+  .ecosystem__gallery_slider .swiper-slide-next {
+    opacity: 0.5;
+    visibility: visible;
+  }
+  .ecosystem__gallery_slider .swiper-slide-fully-visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  .ecosytem__gallery_slider_cat {
+    transform: translateY(40px);
+    opacity: 0;
+    transition:
+      transform 0.6s ease,
+      opacity 0.6s ease;
+  }
+
+  .swiper-slide-active .ecosytem__gallery_slider_cat,
+  .ecosytem__gallery_slider_cat.show {
+    transform: translateY(0);
+    opacity: 1;
+    transition-delay: 0.6s;
+  }
+</style>
+<style>
+  .page_hero__logocase__item {
+    animation: 20s logocaseSlides infinite linear;
+  }
+  .page_hero__logocase:hover .logo_items {
+    animation-play-state: paused;
+  }
+  @keyframes logocaseSlides {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+</style>
+<style>
+  .faq__item_body {
+    display: none;
+  }
+</style>
+<style>
+  .brief_history__slider .swiper-slide {
+    opacity: 0.4;
+  }
+  .brief_history__slider :is(.swiper-slide-active, .swiper-slide-next, .swiper-slide-next + div) {
+    opacity: 1;
+  }
+</style>
+
+<style>
+  .hide_in_view {
+      display: none;
+  }
+</style>
+
+<style>
+  .events__list>.events__list_item:not(:first-child) {
+      display: none;
+  }
+</style>
+<style>
+  .resources_list_wrapper:has([fs-list-instance]) {
+      display: none;
+  }
+</style>
+<style>
+  .popup__form_box {
+    transform: translateX(100%);
+    transition: 300ms;
+  }
+  .popup__overlay {
+    opacity: 0;
+    transition: opacity 300ms 300ms;
+  }
+  .popup.active .popup__form_box {
+    transform: translateX(0);
+  }
+  .popup.active .popup__overlay {
+    opacity: 1;
+  }
+</style>
+
+<style>
+  @media(max-width: 767px) {
+    .eco2__body_item:not(:first-child) {
+      display: none;
+    }
+  }
+</style>
+
+<script async type="module" src="https://cdn.jsdelivr.net/npm/@finsweet/attributes@2/attributes.js" fs-list></script>

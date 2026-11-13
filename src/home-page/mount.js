@@ -12,11 +12,13 @@
   var wraps = imgs.map(function (img, i) {
     var w = document.createElement('div');
     w.className = 'mtl-tab-slide';
-    w.innerHTML = html[i].replace(/@ASSETS@/g, base);
+    /* only the first slide's photos load up front; the rest wait (hidden + lazy) and are warmed after page load */
+    w.innerHTML = html[i].replace(/@ASSETS@/g, base).replace(/loading="eager"/g, i ? 'loading="lazy"' : 'loading="eager" fetchpriority="high"');
     box.appendChild(w);
     return w;
   });
-  function sync() { imgs.forEach(function (img, i) { var on = img.classList.contains('active'); wraps[i].style.display = on ? 'block' : 'none'; wraps[i].classList.toggle('active', on); }); }
+  /* before the tab script has marked a tab active, show the first slide (no blank frame) */
+  function sync() { var any = imgs.some(function (img) { return img.classList.contains('active'); }); imgs.forEach(function (img, i) { var on = any ? img.classList.contains('active') : i === 0; wraps[i].style.display = on ? 'block' : 'none'; wraps[i].classList.toggle('active', on); }); }
   /* phones crop each slide to its main card: flag the layers that sit mostly outside the crop so CSS can drop them */
   wraps.forEach(function (w) {
     var r = w.querySelector('[data-mtl-crop]'); if (!r) return;
@@ -31,4 +33,6 @@
   sync();
   var mo = new MutationObserver(sync);
   imgs.forEach(function (img) { mo.observe(img, { attributes: true, attributeFilter: ['class'] }); });
+  function warm() { setTimeout(function () { [].slice.call(box.querySelectorAll('.mtl-tab-slide img[loading="lazy"]')).forEach(function (im) { im.loading = 'eager'; }); }, 1200); }
+  if (document.readyState === 'complete') warm(); else window.addEventListener('load', warm);
 })();

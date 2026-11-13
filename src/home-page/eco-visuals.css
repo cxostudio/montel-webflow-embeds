@@ -154,3 +154,4 @@
 /* ---------- data section: signal from noise ---------- */
 .mtl-signal { position: absolute; top: 0; left: 0; height: 100%; display: block; }
 .data__aniimation { overflow: visible; }
+.eco2__country_thumb_slider { display: none !important; }  /* replaced by the .mtl-flags rail; no slick on it any more */

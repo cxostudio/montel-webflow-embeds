@@ -186,6 +186,8 @@
     if (reduce || !('IntersectionObserver' in window)) { setTimeout(lightAll, 0); return; }
     els.forEach(function (e, i) {
       var raw = e.textContent.trim(), plus = /\+$/.test(raw), to = parseFloat(raw.replace(/[^\d.]/g, '')), done = false;
+      /* already on screen or above it at boot (reload mid-page): keep the final number, no reset flash */
+      if (e.getBoundingClientRect().top < window.innerHeight) { setTimeout(function () { try { document.dispatchEvent(new CustomEvent('mtl:stat', { detail: { index: i } })); } catch (x) {} }, 0); return; }
       e.style.fontVariantNumeric = 'tabular-nums';
       e.style.minWidth = e.getBoundingClientRect().width + 'px';   /* no layout shift while the digits change */
       e.textContent = '0' + (plus ? '+' : '');
