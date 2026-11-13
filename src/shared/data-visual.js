@@ -1,5 +1,5 @@
 /* =========================================================
-   Montel · "Signal from noise" (homepage data section)
+   Montel · "Signal from noise" (stats bar visual, homepage + Data page)
    Scattered market data (dots) snaps into one flowing curve as
    the section scrolls in. Pulses travel along it; the cursor
    scatters nearby dots. Four nodes under the stats light up as
@@ -59,7 +59,7 @@
     }
     /* markers sit under the four stat numbers */
     var hr = cv.getBoundingClientRect();
-    var nums = [].slice.call(document.querySelectorAll('.data h3')).filter(function (e) { return /\d/.test(e.textContent); }).slice(0, 4);
+    var nums = [].slice.call(document.querySelectorAll('.data__grid h3')).filter(function (e) { return /\d/.test(e.textContent); }).slice(0, 4);
     markers = nums.map(function (e) { var b = e.getBoundingClientRect(); return Math.min(.97, Math.max(.03, (b.left + 18 - hr.left) / W)); });
     /* stacked stats (phone): spread the nodes evenly and drop the links up to the numbers */
     links = markers.length === 4 && (Math.max.apply(null, markers) - Math.min.apply(null, markers)) > .3;
