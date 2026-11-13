@@ -1,7 +1,7 @@
 /* =========================================================
    Montel · Explore by country · coverage map  (v2.0)
    Same visual language as the Data hero map: hex dot grid,
-   pine/mint palette, white cards, interconnector arcs.
+   pine/mint palette, white cards.
    Needs montel-map-data.js (dot grid, shared with the hero)
    and montel-map-borders.js (country outlines, same projection).
 
@@ -13,6 +13,9 @@
      [data-mtl-cov-count]  filled with "N commodity groups available"
    Markup needed: <div class="mtl-covmap" data-mtl-covmap data-default="NL"></div>
    (anything inside it is replaced).
+   v3: commodity filter (All / Power / Gas / Carbon / Fundamentals, a group
+   only shows once at least one country has it). Countries shade by depth:
+   how many products the CMS lists for the chosen commodity. No arcs.
    ========================================================= */
 (function () {
   'use strict';
@@ -24,7 +27,7 @@
   var split = function (s) { return (s || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean); };
   var ease = { out: function (t) { return 1 - Math.pow(1 - t, 3); }, inOut: function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; } };
   var lerp = function (a, b, t) { return a + (b - a) * t; };
-  var hex = function (h) { return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]; };
+  var hex = function (h) { if (h.charAt(0) !== '#') return h.match(/[\d.]+/g).map(Number); return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]; };
   var mix = function (a, b, t) { a = hex(a); b = hex(b); return 'rgb(' + Math.round(lerp(a[0], b[0], t)) + ',' + Math.round(lerp(a[1], b[1], t)) + ',' + Math.round(lerp(a[2], b[2], t)) + ')'; };
 
   /* split one bound chip into one chip per comma value, keeping the designer's chip styling */
@@ -49,7 +52,8 @@
       '<canvas class="mtl-covmap__canvas" aria-hidden="true"></canvas>' +
       '<label class="mtl-covmap__pick"><span class="mtl-covmap__sr">Choose a country</span><select></select></label>' +
       '<div class="mtl-covmap__label" aria-hidden="true"></div>' +
-      '<div class="mtl-covmap__legend" aria-hidden="true"><span><i class="is-sel"></i>Selected</span><span><i class="is-on"></i>Covered</span><span><i></i>Not covered</span></div>';
+      '<div class="mtl-covmap__filter" role="group" aria-label="Show coverage for"></div>' +
+      '<div class="mtl-covmap__legend" aria-hidden="true"><span><i class="is-sel"></i>Selected</span><span class="mtl-covmap__ramp">Less<b></b>More coverage</span><span><i></i>Not covered</span></div>';
     this.cv = root.querySelector('canvas'); this.ctx = this.cv.getContext('2d');
     this.sel = root.querySelector('select'); this.label = root.querySelector('.mtl-covmap__label');
 
@@ -59,7 +63,8 @@
       var code = (el.getAttribute('data-code') || '').toUpperCase().trim(); if (!code) return;
       var groups = GROUPS.filter(function (g) { return split(el.getAttribute('data-' + g[0])).length; }).map(function (g) { return g[1]; });
       if (!groups.length) return;
-      self.items[code] = { el: el, code: code, name: el.getAttribute('data-name') || code, groups: groups };
+      var depth = {}; GROUPS.forEach(function (g) { depth[g[1]] = split(el.getAttribute('data-' + g[0])).length; });
+      self.items[code] = { el: el, code: code, name: el.getAttribute('data-name') || code, groups: groups, depth: depth };
       var cnt = el.querySelector('[data-mtl-cov-count]');
       if (cnt) cnt.textContent = groups.length + ' commodity group' + (groups.length === 1 ? '' : 's') + ' available';
       chips(el);
@@ -81,7 +86,14 @@
       return { i: i, code: c.code, name: (it && it.name) || c.name, x: c.x, y: c.y, faded: !!c.faded, on: !!it, s: 0, h: 0,
         path: B[c.code] ? new Path2D(B[c.code]) : null };
     });
-    this.byCode = {}; this.C.forEach(function (c) { self.byCode[c.code] = c; });
+    this.byCode = {}; this.C.forEach(function (c) { self.byCode[c.code] = c; c.v = 0; c.tv = 0; });
+
+    /* commodity filter: All + every group at least one country has */
+    var present = GROUPS.map(function (g) { return g[1]; }).filter(function (g) { return Object.keys(self.items).some(function (k) { return self.items[k].depth[g] > 0; }); });
+    this.filterEl = root.querySelector('.mtl-covmap__filter');
+    this.filterEl.innerHTML = ['All'].concat(present).map(function (g) { return '<button type="button" data-g="' + g + '">' + g + '</button>'; }).join('');
+    [].slice.call(this.filterEl.querySelectorAll('button')).forEach(function (b) { b.addEventListener('click', function () { self.setFilter(b.getAttribute('data-g')); }); });
+    this.present = present;
 
     /* frame the map on the covered markets (no crop of what matters) */
     var x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
@@ -97,9 +109,10 @@
     this.sel.innerHTML = list.map(function (c) { return '<option value="' + c.code + '">' + c.name + '</option>'; }).join('');
     this.sel.addEventListener('change', function () { self.pick(self.sel.value, true); });
 
-    this.t = 0; this.last = 0; this.reveal = reduce ? 1 : 0; this.hover = null; this.arcs = []; this.on = false; this.raf = 0;
+    this.t = 0; this.last = 0; this.reveal = reduce ? 1 : 0; this.hover = null; this.on = false; this.raf = 0;
     this.bind();
     this.resize();
+    this.setFilter('All', true);
     var first = (root.getAttribute('data-default') || '').toUpperCase();
     this.pick(this.items[first] ? first : (list[0] && list[0].code), false);
   }
@@ -144,24 +157,31 @@
     this.cur = c || { code: code, name: it.name, x: null };
     this.sel.value = code;
     Object.keys(this.items).forEach(function (k) { self.items[k].el.classList.toggle('is-active', k === code); });
-    this.arcs = [];
-    if (c) {
-      var near = this.C.filter(function (o) { return o.on && o !== c; })
-        .map(function (o) { return { o: o, d: Math.hypot(o.x - c.x, o.y - c.y) }; })
-        .filter(function (n) { return n.d > 105 && n.d < 380; })
-        .sort(function (a, b) { return a.d - b.d; }).slice(0, 4);
-      near.forEach(function (n, j) { self.arcs.push({ a: c, b: n.o, t0: self.t + .15 + j * .12, ph: Math.random() }); });
-    }
     this.picked = this.t;
     this.showLabel(this.hover || this.cur);
     this.kick();
     void user;
   };
 
+  /* coverage depth per country for the chosen commodity, 0..1 (0 = not covered) */
+  Cov.prototype.setFilter = function (g, silent) {
+    var self = this; this.filter = g;
+    [].slice.call(this.filterEl.querySelectorAll('button')).forEach(function (b) { var on = b.getAttribute('data-g') === g; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on); });
+    var val = function (it) { return g === 'All' ? self.present.filter(function (x) { return it.depth[x] > 0; }).length : (it.depth[g] || 0); };
+    var max = 0; Object.keys(this.items).forEach(function (k) { max = Math.max(max, val(self.items[k])); });
+    this.C.forEach(function (c) { var it = self.items[c.code]; var v = it ? val(it) : 0; c.tv = v && max ? .35 + .65 * (max > 1 ? (v - 1) / (max - 1) : 1) : 0; });
+    if (!silent) { this.showLabel(this.hover || this.cur); this.kick(); }
+  };
+
   Cov.prototype.showLabel = function (c) {
     var L = this.label, it = c && this.items[c.code];
     if (!it || c.x == null || !this.k) { L.classList.remove('is-in'); return; }
-    L.innerHTML = '<b>' + it.name + '</b><span>' + it.groups.map(function (g) { return '<em>' + g + '</em>'; }).join('') + '</span>';
+    var f = this.filter, chipsTxt;
+    if (f && f !== 'All') {
+      var key = GROUPS.filter(function (g) { return g[1] === f; })[0][0], prods = split(it.el.getAttribute('data-' + key));
+      chipsTxt = prods.length ? prods.map(function (p) { return '<em>' + p + '</em>'; }).join('') : '<em class="is-none">No ' + f.toLowerCase() + ' coverage</em>';
+    } else chipsTxt = it.groups.map(function (g) { return '<em>' + g + '</em>'; }).join('');
+    L.innerHTML = '<b>' + it.name + '</b><span>' + chipsTxt + '</span>';
     var x = this.ox + c.x * this.k, y = this.oy + c.y * this.k;
     var w = L.offsetWidth || 180, h = L.offsetHeight || 70;
     var right = x + 26 + w < this.W - 12;
@@ -189,6 +209,7 @@
       var ns = c.s + (ts - c.s) * Math.min(1, dt * 9), nh = c.h + (th - c.h) * Math.min(1, dt * 12);
       if (Math.abs(ns - c.s) > .002 || Math.abs(nh - c.h) > .002) busy = true;
       c.s = ns; c.h = nh;
+      var nv = c.v + (c.tv - c.v) * Math.min(1, dt * 7); if (Math.abs(nv - c.v) > .002) busy = true; c.v = nv;
     });
     return busy;
   };
@@ -212,9 +233,11 @@
       if (d > R) continue;
       var fin = Math.min(1, (R - d) / 90);
       var col, a, rr = r0;
-      if (c.on) {
-        col = c.s > .01 ? mix(COL.mint, COL.pine, c.s) : (c.h > .01 ? mix(COL.mint, COL.pine2, c.h) : COL.mint);
-        a = .72 + .28 * Math.max(c.s, c.h * .6); rr = r0 * (1 + .18 * c.s);
+      if (c.on && (c.v > .02 || c.s > .01)) {
+        var base = mix(COL.mint2, COL.pine2, Math.min(1, c.v));
+        col = c.s > .01 ? mix(base, COL.pine, c.s) : (c.h > .01 ? mix(base, COL.pine, c.h * .6) : base);
+        a = (.55 + .4 * c.v) + .25 * Math.max(c.s, c.h * .6); rr = r0 * (1 + .18 * c.s);
+        if (c.v < .02) { col = mix(COL.off, COL.pine, c.s); a = .45 + .4 * c.s; }
       } else { col = COL.off; a = .3; }
       a *= w * fin;
       if (a < .02) continue;
@@ -242,31 +265,8 @@
       ctx.lineWidth = (1.1 + .9 * e) / k; ctx.stroke(cc.path);
     }
 
-    /* 3. interconnector arcs + travelling sparks (hero flows) */
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     var self = this;
-    this.arcs.forEach(function (A) {
-      var p = Math.max(0, Math.min(1, (t - A.t0) / .7)); if (p <= 0) return;
-      var ax = (ox + A.a.x * k) * dpr, ay = (oy + A.a.y * k) * dpr, bx = (ox + A.b.x * k) * dpr, by = (oy + A.b.y * k) * dpr;
-      var mx = (ax + bx) / 2, my = (ay + by) / 2, dx = bx - ax, dy = by - ay, L = Math.hypot(dx, dy) || 1;
-      var nx = -dy / L, ny = dx / L; if (ny > 0) { nx = -nx; ny = -ny; }   /* bow upwards */
-      var cx = mx + nx * L * .2, cy = my + ny * L * .2;
-      var q = function (u) { var v = 1 - u; return [v * v * ax + 2 * v * u * cx + u * u * bx, v * v * ay + 2 * v * u * cy + u * u * by]; };
-      ctx.beginPath(); var st = q(0); ctx.moveTo(st[0], st[1]);
-      var e2 = ease.inOut(p);
-      for (var s = 1; s <= 24; s++) { var pt = q(e2 * s / 24); ctx.lineTo(pt[0], pt[1]); }
-      ctx.lineCap = 'round'; ctx.strokeStyle = 'rgba(255,255,255,.95)'; ctx.lineWidth = 4.5 * dpr; ctx.stroke();
-      ctx.strokeStyle = 'rgba(13,109,92,.85)'; ctx.lineWidth = 1.6 * dpr; ctx.stroke();
-      if (p >= 1) {
-        var end = q(1); ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(end[0], end[1], 4.6 * dpr, 0, 6.283); ctx.fill();
-        ctx.fillStyle = 'rgba(13,109,92,.95)'; ctx.beginPath(); ctx.arc(end[0], end[1], 2.8 * dpr, 0, 6.283); ctx.fill();
-        if (!reduce) {
-          var u = ((t * .45 + A.ph) % 1), sp = q(u), fade = Math.sin(u * Math.PI);
-          ctx.fillStyle = 'rgba(26,159,130,' + (.22 * fade) + ')'; ctx.beginPath(); ctx.arc(sp[0], sp[1], 6 * dpr, 0, 6.283); ctx.fill();
-          ctx.fillStyle = 'rgba(13,109,92,' + (.95 * fade) + ')'; ctx.beginPath(); ctx.arc(sp[0], sp[1], 2.4 * dpr, 0, 6.283); ctx.fill();
-        }
-      }
-    });
 
     /* 4. selected market pin with pulse (hero focus marker) */
     var cu = this.cur;
