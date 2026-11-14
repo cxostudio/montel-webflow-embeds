@@ -11,8 +11,10 @@ wc -c dist/*
 python3 build/gen-mounts.py
 for p in analytics:montel-fa risk:montel-risk news:montel-news; do
   page=${p%%:*}; m=${p#*:}
-  cat src/$page-page/mount.js src/$page-page/$m.js src/shared/data-stats.js | $E --minify --loader=js > dist/montel-$page.min.js
-  cat src/$page-page/$m.css src/shared/hero.css | $E --minify --loader=css > dist/montel-$page.min.css
+  extra_js=""; extra_css=""
+  if [ "$page" = analytics ]; then extra_js="src/analytics-page/montel-workflow.js"; extra_css="src/analytics-page/montel-workflow.css"; fi
+  cat src/$page-page/mount.js src/$page-page/$m.js $extra_js src/shared/data-stats.js | $E --minify --loader=js > dist/montel-$page.min.js
+  cat src/$page-page/$m.css src/shared/hero.css $extra_css | $E --minify --loader=css > dist/montel-$page.min.css
 done
 wc -c dist/*
 
