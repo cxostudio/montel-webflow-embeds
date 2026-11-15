@@ -1,0 +1,3 @@
+Risk page head pins before 2026-11-15 change (JSON-LD block above them unchanged):
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cxostudio/montel-webflow-embeds@ec608a1659e8b7b824be31d9c404b28d63428117/dist/montel-risk.min.css" integrity="sha384-egU5C908kNWuNDiZRiTRdE40dm5hgEviqmOrZb2r3L2F7Wxk7KmQ8KKAE45wvM8j" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/gh/cxostudio/montel-webflow-embeds@ec608a1659e8b7b824be31d9c404b28d63428117/dist/montel-risk.min.js" integrity="sha384-rD3jCpbKG9JwECafDdngXBW0icvICTkgMKxhp1x7Oe452EhnEdxX3cOueXVA3gP8" crossorigin="anonymous"></script>
