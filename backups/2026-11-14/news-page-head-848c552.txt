@@ -1,0 +1,3 @@
+<!-- Montel hero animation + numbers count-up + live newsroom map + cover scroll (repo cxostudio/montel-webflow-embeds, pinned commit) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cxostudio/montel-webflow-embeds@848c552801455dc97af0c8fce1f8ae1d728edcc7/dist/montel-news.min.css" integrity="sha384-r7ml268XUgTDEipN6ukXF1ouKAyOikreirxCRmBtR+nDxY4BnXJrsqTdQSmMs4FJ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/gh/cxostudio/montel-webflow-embeds@848c552801455dc97af0c8fce1f8ae1d728edcc7/dist/montel-news.min.js" integrity="sha384-XjaQIhBaZ0xWTz/cAiVO6j3WHvy7wQuex6lHbj1V4pPywmcamNBMMmrYn2y+bn5X" crossorigin="anonymous"></script>
