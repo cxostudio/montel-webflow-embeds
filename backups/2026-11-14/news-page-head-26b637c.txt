@@ -1,0 +1,2 @@
+<!-- previous News head, map v3 -->
+commit 26b637cb23dd7c4ab023f7a5e3c5dfe04f8855e6 css sha384-vnWC7N9JcsQF+9DBHFWgH3a1FcUrXVuGeGxiM7Mvzn+LlvTxbfT8/kmUvMrkcKgt js sha384-OL/qkPKsoS6+hUogAzXDpZk+qjQlY3xHHAlwQEW5asZk6ukpjNjVmwiCh+VYkYLG

@@ -84,6 +84,13 @@
   wrap.innerHTML = html;
   box.classList.add('has-mtl-nm');
   box.appendChild(wrap);
+  /* split layout (combo class is-map-split, set in Webflow): the wire joins the title in the right column */
+  if (box.classList.contains('is-map-split') && box.parentNode) {
+    var wire = wrap.querySelector('.mtl-nm__wire');
+    wire.classList.add('is-split');
+    box.parentNode.appendChild(wire);
+    wrap.querySelector('.mtl-nm').classList.add('is-split');
+  }
 
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var MINT = '143, 240, 201';
@@ -94,7 +101,8 @@
   var DESKS = Object.keys(OFFICES).concat(Object.keys(COVER));
 
   function NM(root) {
-    var self = this, q = function (s) { return root.querySelector(s); };
+    var scope = root.closest('section') || root;
+    var self = this, q = function (s) { return root.querySelector(s) || scope.querySelector(s); };
     this.root = root; this.stage = q('.mtl-nm__stage'); this.cv = q('.mtl-nm__canvas'); this.ctx = this.cv.getContext('2d');
     this.card = q('.mtl-nm__card'); this.tip = q('.mtl-nm__tip'); this.list = q('.mtl-nm__list'); this.countEl = q('.mtl-nm__count b');
     this.i = -1; this.count = 186; this.clock = 7 * 60 + 41; this.fx = []; this.hover = null;
