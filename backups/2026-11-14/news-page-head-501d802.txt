@@ -1,0 +1,3 @@
+<!-- Montel hero animation + numbers count-up (repo cxostudio/montel-webflow-embeds, pinned commit) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cxostudio/montel-webflow-embeds@501d8025bd88aec045fc0844ac1bdb73b68549b8/dist/montel-news.min.css" integrity="sha384-U33vjFlXMMtrL7xCVULtVCWqrU6Ji8ZVP4KQ8zvY74hyjKReBhvXrVTe5tSOkrm/" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/gh/cxostudio/montel-webflow-embeds@501d8025bd88aec045fc0844ac1bdb73b68549b8/dist/montel-news.min.js" integrity="sha384-oa3ogLVxLEdUeVz+fiWMKG6IXA9m7Vvhe61ZA3HA32jvHh6Dihdh4/Dzq0r1+Idg" crossorigin="anonymous"></script>
