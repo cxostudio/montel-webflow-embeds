@@ -13,7 +13,8 @@ for p in analytics:montel-fa risk:montel-risk news:montel-news; do
   page=${p%%:*}; m=${p#*:}
   extra_js=""; extra_css=""
   if [ "$page" = analytics ]; then extra_js="src/analytics-page/montel-workflow.js"; extra_css="src/analytics-page/montel-workflow.css"; fi
-  if [ "$page" = risk ]; then extra_js="src/shared/data-visual.js src/risk-page/cover-scroll.js src/risk-page/montel-forward.js"; extra_css="src/shared/data-visual.css src/risk-page/montel-forward.css"; fi
+  if [ "$page" = news ]; then extra_js="src/shared/montel-map-data.js src/shared/cover-scroll.js src/news-page/montel-newsmap.js"; extra_css="src/news-page/montel-newsmap.css"; fi
+  if [ "$page" = risk ]; then extra_js="src/shared/data-visual.js src/shared/cover-scroll.js src/risk-page/montel-forward.js"; extra_css="src/shared/data-visual.css src/risk-page/montel-forward.css"; fi
   cat src/$page-page/mount.js src/$page-page/$m.js $extra_js src/shared/data-stats.js | $E --minify --loader=js > dist/montel-$page.min.js
   cat src/$page-page/$m.css src/shared/hero.css $extra_css | $E --minify --loader=css > dist/montel-$page.min.css
 done

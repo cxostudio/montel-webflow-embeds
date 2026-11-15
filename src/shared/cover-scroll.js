@@ -1,5 +1,5 @@
 /* =========================================================
-   Montel · "cover" scroll (Risk page)
+   Montel · "cover" scroll (shared: Risk, News)
    A section whose variant puts it in front (position relative,
    z-index >= 2) with rounded top corners slides over the section
    before it, which holds still until it is covered (as on
