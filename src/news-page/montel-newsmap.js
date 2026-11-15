@@ -245,9 +245,15 @@
     card.querySelector('.mtl-nm__time').textContent = tm;
     card.querySelector('.mtl-nm__h').textContent = s[2];
     card.querySelector('.mtl-nm__picked').innerHTML = picked.length ? '<span>Picked up in</span>' + picked.map(flag).join('') : '';
-    var w = Math.min(330, this.W * .46), x = right ? p[0] - w - 22 : p[0] + 22, y = Math.max(8, Math.min(this.H - 170, p[1] - 70));
+    /* keep the card inside what is visible: the map bleeds past the section top and the screen's left edge */
+    var sr = this.stage.getBoundingClientRect(), sec = this.root.closest('section'), secTop = sec ? sec.getBoundingClientRect().top - sr.top : 0;
+    var minX = Math.max(8, -sr.left + 16), minY = Math.max(8, secTop + 24);
+    var w = Math.min(330, this.W * .46), x = right ? p[0] - w - 22 : p[0] + 22, h = card.offsetHeight || 150;
+    if (x < minX) x = p[0] + 22;
+    x = Math.max(minX, Math.min(this.W - w - 8, x));
+    var y = Math.max(minY, Math.min(this.H - h - 8, p[1] - 70));
     card.style.width = w + 'px';
-    card.style.transform = 'translate(' + Math.max(6, x) + 'px,' + y + 'px)';
+    card.style.transform = 'translate(' + x + 'px,' + y + 'px)';
     card.classList.remove('is-on'); void card.offsetWidth; card.classList.add('is-on');
   };
   NM.prototype.hideCard = function () { this.card.classList.remove('is-on'); };
