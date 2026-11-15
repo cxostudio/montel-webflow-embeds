@@ -23,9 +23,9 @@ html.mtl-js .mtl-nm:not(.is-in) { opacity: 0; transform: translateY(24px); }
 /* map: dissolves into the background at its edges */
 .mtl-nm__stage { position: relative; aspect-ratio: 790 / 640; margin: -24px 0 -24px -24px; }
 .mtl-nm__canvas { position: absolute; inset: 0; display: block;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16%, #000 84%, transparent 100%), radial-gradient(ellipse 66% 70% at 50% 50%, #000 66%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, rgba(0,0,0,.35) 14%, #000 32%, #000 82%, transparent 100%), linear-gradient(to right, transparent 0, #000 10%, #000 56%, rgba(0,0,0,.4) 76%, transparent 94%);
   -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(to bottom, transparent 0, #000 16%, #000 84%, transparent 100%), radial-gradient(ellipse 66% 70% at 50% 50%, #000 66%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, rgba(0,0,0,.35) 14%, #000 32%, #000 82%, transparent 100%), linear-gradient(to right, transparent 0, #000 10%, #000 56%, rgba(0,0,0,.4) 76%, transparent 94%);
   mask-composite: intersect; }
 
 /* story card: same language as the hero's wire card */
