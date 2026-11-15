@@ -23,8 +23,10 @@ html.mtl-js .mtl-nm:not(.is-in) { opacity: 0; transform: translateY(24px); }
 /* map: dissolves into the background at its edges */
 .mtl-nm__stage { position: relative; aspect-ratio: 790 / 640; margin: -24px 0 -24px -24px; }
 .mtl-nm__canvas { position: absolute; inset: 0; display: block;
-  -webkit-mask-image: radial-gradient(ellipse 66% 64% at 50% 50%, #000 70%, transparent 100%);
-  mask-image: radial-gradient(ellipse 66% 64% at 50% 50%, #000 70%, transparent 100%); }
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16%, #000 84%, transparent 100%), radial-gradient(ellipse 66% 70% at 50% 50%, #000 66%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to bottom, transparent 0, #000 16%, #000 84%, transparent 100%), radial-gradient(ellipse 66% 70% at 50% 50%, #000 66%, transparent 100%);
+  mask-composite: intersect; }
 
 /* story card: same language as the hero's wire card */
 .mtl-nm__card { position: absolute; left: 0; top: 0; z-index: 2; padding: 18px 20px 18px; border-radius: 20px; background: var(--paper); color: #12302c;
@@ -68,7 +70,7 @@ html.mtl-js .mtl-nm:not(.is-in) { opacity: 0; transform: translateY(24px); }
 
 /* split layout: map alone in the left column, wire under the title on the right */
 .mtl-nm.is-split { display: block; }
-.mtl-nm.is-split .mtl-nm__stage { margin: -24px -12px -24px -24px; }
+.mtl-nm.is-split .mtl-nm__stage { margin: -48px -24px -48px -150px; }
 .mtl-nm__wire.is-split { grid-column: 2 / 3; grid-row: 2 / 3; color: #eaf7f4; font-family: inherit; line-height: 1.25; -webkit-font-smoothing: antialiased; font-feature-settings: "tnum" 1;
   --ink: #eaf7f4; --muted: rgba(220, 240, 236, .62); --line: rgba(255,255,255,.1); --serif: var(--mtl-serif, "Source Serif 4", Georgia, "Times New Roman", serif); }
 :where(.mtl-nm__wire.is-split p, .mtl-nm__wire.is-split ol, .mtl-nm__wire.is-split li) { margin: 0; padding: 0; font: inherit; list-style: none; }
