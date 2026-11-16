@@ -24,3 +24,7 @@ wc -c dist/*
 cat src/home-page/mount.js src/home-page/montel-motion-core.js src/home-page/slide-trade.js src/home-page/slide-forecast.js src/home-page/slide-assets.js src/home-page/slide-ppa.js src/home-page/slide-advice.js src/shared/montel-map-data.js src/home-page/flags-data.js src/home-page/eco-visuals.js src/home-page/fixes.js src/shared/data-visual.js src/shared/data-stats.js | $E --minify --loader=js > dist/montel-home.min.js
 cat src/home-page/montel-motion-core.css src/home-page/slide-*.css src/home-page/page.css src/home-page/eco-visuals.css src/home-page/fixes.css src/shared/data-visual.css | $E --minify --loader=css > dist/montel-home.min.css
 wc -c dist/montel-home.*
+
+# Why Montel: key numbers count-up only
+cat src/shared/data-stats.js | $E --minify --loader=js > dist/montel-why.min.js
+wc -c dist/montel-why.min.js
